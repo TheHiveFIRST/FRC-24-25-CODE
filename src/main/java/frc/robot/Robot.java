@@ -236,6 +236,24 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
+  public void testPeriodic() {
+  }
 
+  public void startTimer() {
+    m_timer.restart(); // Reset the timer to 0
+    m_timer.start(); // Start the timer
+ }
+
+ public double getElapsedTime() {
+     return m_timer.get(); // Get elapsed time in seconds
+ }
+
+public void delayTimer(int seconds){
+  m_timer.delay(seconds);
+}
+
+public void stopTimer() {
+  m_timer.stop(); // Stop the timer
+ }
 
 }
