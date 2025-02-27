@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
 //import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.StingerSubsystem;
@@ -19,6 +20,9 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import  com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.wpilibj.Timer;
+
+
 
 
 /**
@@ -42,6 +46,9 @@ public class Robot extends TimedRobot {
   double setPos;
   double setAng = 0.32; 
   DigitalInput limitSwitch = new DigitalInput(2);
+   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private Timer m_timer = new Timer();
+
 
 
   /**
@@ -85,29 +92,39 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-     * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
-     */
-
-    // schedule the autonomous command (example)
+ 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-  }
+  
 
-  public PathPlannerAuto runPath(){
-    return new PathPlannerAuto("Ishana Path");
+  // public PathPlannerAuto runPath(){
+  //   return new PathPlannerAuto("Ishana Path");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    if (m_timer.get() < 3.0) {
+      m_robotDrive.drive(0,0.5,0,true);
+      System.out.println("Moving Forward...");
+    } else {
+      // Stop movement after 3 seconds
+      System.out.println("Stopping...");}
+    
+      
+      if (m_timer.get() > 3){
+        m_StingerSubsystem.setIntakePower(0.5);
+        delayTimer(3);
+        m_timer.stop();
+
+
+      }
+
 
   }
+
+  
 
   // public Command getAutonomousCommand() {
   //   // This method loads the auto when it is called, however, it is recommended
@@ -219,6 +236,6 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-  }
-  }
+
+
+}
