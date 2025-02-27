@@ -162,25 +162,24 @@ public class Robot extends TimedRobot {
         setAng = 0.5;
       }
       else if (m_operatorController.getRawButtonPressed(2)){
-        setPos = 12.5;
+        setPos = 9.1; // L2 change 
         new WaitCommand(.5);
         setAng = 0.5;
       }
       else if (m_operatorController.getRawButtonPressed(4)){
-        setPos = 22;
+        setPos = 18.6;
         new WaitCommand(0.5);
         setAng = 0.5;
       }
       if (m_operatorController.getRawButtonPressed(3)){
-        setPos = 33.3;
+        setPos = 32.3;
         new WaitCommand(0.5);
-        setAng = 0.47;
+        setAng = 0.53;
       }
       else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)){
-        setAng = 0.32; //default/source angle 
+        setAng = 0.27; //default/source angle 
 
       }
-      
       
       if (m_operatorController.getRawButtonPressed(5)){
         m_StingerSubsystem.setIntakePower(0.3);
