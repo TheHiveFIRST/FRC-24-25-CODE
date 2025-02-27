@@ -28,21 +28,22 @@ import  com.pathplanner.lib.commands.PathPlannerAuto;
  * project.
  */
 public class Robot extends TimedRobot {
-  //ElevatorSubsystem ElevatorUp = new ElevatorSubsystem();
-  //ElevatorSubsystem ElevatorDown = new ElevatorSubsystem(); 
+
   private Command m_autonomousCommand;
-  
   private RobotContainer m_robotContainer;
+
   Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
   Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
-  StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
+
+  StingerSubsystem m_StingerSubsystem;
   ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  
   LEDSubsystem m_LedSubsystem = new LEDSubsystem();
   
   double setPos;
-  double setAng = 0.32; 
-  DigitalInput limitSwitch = new DigitalInput(2);
+  double setAng = 0.32;
 
+  DigitalInput limitSwitch = new DigitalInput(2);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -71,7 +72,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
 
     CommandScheduler.getInstance().run();
-    // System.out.println("limit switch state: " + limitSwitch.get());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -99,34 +99,22 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public PathPlannerAuto runPath(){
-    return new PathPlannerAuto("Ishana Path");
-  }
-
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-
+    
   }
 
-  // public Command getAutonomousCommand() {
-  //   // This method loads the auto when it is called, however, it is recommended
-  //   // to first load your paths/autos when code starts, then return the
-  //   // pre-loaded auto/path
-   
-  //  return new PathPlannerAuto("Ishana Path.path");
-  //  }
-  
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_StingerSubsystem = new StingerSubsystem();
   }
 
   /** This function is called periodically during operator control. */
@@ -154,38 +142,29 @@ public class Robot extends TimedRobot {
       }
       else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)){
         setAng = 0.32; //default/source angle 
-
       }
-      
       
       if (m_operatorController.getRawButtonPressed(5)){
         m_StingerSubsystem.setIntakePower(0.3);
         m_LedSubsystem.setPattern(-0.99);
-
       }
       else if (m_operatorController.getRawButtonPressed(6)){
         m_StingerSubsystem.setIntakePower(-0.5);
         m_LedSubsystem.setPattern(0.57);
-
       }
       else if (m_operatorController.getRawButtonReleased(5) || m_operatorController.getRawButtonReleased(6)) {
         m_StingerSubsystem.setIntakePower(0);
         m_LedSubsystem.setPattern(0.41);
-
-
       }
       else if (m_operatorController.getRawButtonPressed(  7)){
         setPos = 13;
         new WaitCommand(0.5);
         setAng = 0.45;
-
       }
-
       else if (m_operatorController.getRawButtonPressed(8)){
         setPos = 25;
         new WaitCommand(0.5);
         setAng = 0.45;
-
       }
 
       //if(m_operatorController.getRawButtonPressed(5)){
@@ -199,14 +178,14 @@ public class Robot extends TimedRobot {
     
       m_ElevatorSubsystem.elevatorPIDControl(setPos);
       m_ElevatorSubsystem.elevatorPIDSetPower();
-      //calculate and set PID for motor 
+      //calculate and set PID for motor
+
       m_StingerSubsystem.PivotPIDControl(setAng);
       m_StingerSubsystem.PivotPIDSetPower(); 
       //calculate and set
      
       if (limitSwitch.get()){
         m_ElevatorSubsystem.resetEncoder();
-        // System.out.println("imagine encoder reset here");
       }
   }
   
@@ -221,4 +200,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-  }
+
+}
