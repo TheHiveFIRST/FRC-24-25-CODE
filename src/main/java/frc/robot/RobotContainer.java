@@ -44,6 +44,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+ // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -140,8 +141,8 @@ public class RobotContainer {
     // // Run path following command, then stop at the end.
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   return new SequentialCommandGroup(
-        new RunCommand(() -> m_robotDrive.drive(0, 0.5, 0, true), m_robotDrive)
-            .withTimeout(3),  // Move forward for 3 seconds
+        new RunCommand(() -> m_robotDrive.drive(0, -0.5, 0, true), m_robotDrive)
+            .withTimeout(2),  // Move forward for 2 seconds
         
         new InstantCommand(() -> {
             m_robotDrive.drive(0, 0, 0, true);
@@ -149,7 +150,7 @@ public class RobotContainer {
         }),
 
         new InstantCommand(() -> {
-            // m_StingerSubsystem.setIntakePower(0.5);
+            //m_StingerSubsystem.setIntakePower(0.5);
             System.out.println("Activating intake...");
         }),
 

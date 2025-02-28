@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
   // Variables
   private double setPos = 0;
-  private double setAng = 0.925;
+  private double setAng = 0.295;
   private final DigitalInput limitSwitch = new DigitalInput(2);
   private final Timer m_timer = new Timer();
 
