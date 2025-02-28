@@ -33,11 +33,11 @@ public class Robot extends TimedRobot {
   private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();  // Ensuring DriveSubsystem is properly initialized
+  // private final DriveSubsystem m_robotDrive = new DriveSubsystem();  // Ensuring DriveSubsystem is properly initialized
 
   // Variables
   private double setPos = 0;
-  private double setAng = 0.32;
+  private double setAng = 0.925;
   private final DigitalInput limitSwitch = new DigitalInput(2);
   private final Timer m_timer = new Timer();
 
@@ -76,33 +76,33 @@ public class Robot extends TimedRobot {
   /** Runs the autonomous sequence */
   @Override
   public void autonomousPeriodic() {
-    System.out.println("Autonomous Timer: " + m_timer.get());  // Debug log
+    // System.out.println("Autonomous Timer: " + m_timer.get());  // Debug log
 
-    if (m_timer.get() < 3.0) {
-      m_robotDrive.drive(0, 0.5, 0, true);
-      System.out.println("Moving Forward...");
-    } else {
-      m_robotDrive.drive(0, 0, 0, true); // Stop movement
-      System.out.println("Stopping...");
+    // if (m_timer.get() < 3.0) {
+    //   m_robotDrive.drive(0, 0.5, 0, true);
+    //   System.out.println("Moving Forward...");
+    // } else {
+    //   m_robotDrive.drive(0, 0, 0, true); // Stop movement
+    //   System.out.println("Stopping...");
 
-      if (m_timer.get() > 3.0) {
-        m_StingerSubsystem.setIntakePower(0.5);
-        delayTimer(3);
-        m_timer.stop();
-      }
-    }
+    //   if (m_timer.get() > 3.0) {
+    //     m_StingerSubsystem.setIntakePower(0.5);
+    //     delayTimer(3);
+    //     m_timer.stop();
+    //   }
+    // }
   }
 
   /** Schedules a path-following command */
-  public void runPath() {
-    Command pathCommand = new PathPlannerAuto("Ishana Path");
-    if (pathCommand != null) {
-      pathCommand.schedule();
-      System.out.println("Running Path: Ishana Path");
-    } else {
-      System.out.println("Failed to schedule Path");
-    }
-  }
+  // public void runPath() {
+  //   Command pathCommand = new PathPlannerAuto("Ishana Path");
+  //   if (pathCommand != null) {
+  //     pathCommand.schedule();
+  //     System.out.println("Running Path: Ishana Path");
+  //   } else {
+  //     System.out.println("Failed to schedule Path");
+  //   }
+  // }
 
   @Override
   public void teleopInit() {
@@ -126,7 +126,7 @@ public class Robot extends TimedRobot {
     } else if (m_operatorController.getRawButtonPressed(3)) {
       setElevatorAndPivot(33.3, 0.47);
     } else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)) {
-      setAng = 0.32; // Reset pivot angle
+      setAng = 0.295; // Reset pivot angle
     }
 
     if (m_operatorController.getRawButtonPressed(5)) {
