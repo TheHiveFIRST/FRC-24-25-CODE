@@ -141,7 +141,7 @@ public class RobotContainer {
     // // Run path following command, then stop at the end.
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   return new SequentialCommandGroup(
-        new RunCommand(() -> m_robotDrive.drive(0, -0.5, 0, true), m_robotDrive)
+        new RunCommand(() -> m_robotDrive.drive(0.2, 0, 0, true), m_robotDrive)
             .withTimeout(2),  // Move forward for 2 seconds
         
         new InstantCommand(() -> {
