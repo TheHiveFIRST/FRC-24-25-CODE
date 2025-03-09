@@ -52,15 +52,13 @@ SlewRateLimiter lessFast = new SlewRateLimiter(1);
 
     }
     public void elevatorPIDControl(double setPosition){
-        output = m_elevatorPID.calculate(m_elevatorEncoder.getDistance(), setPosition) ;
-        //System.out.println("Encoder Position" + m_elevatorEncoder.getDistance());
-        //System.out.println("Set Position" + setPosition);
+        //output = m_elevatorPID.calculate(m_elevatorEncoder.getDistance(), setPosition);
+       // m_elevatorMotor.set(output);
+        //m_elevatorFollower.set(output);
+        System.out.println("Elevator pid ran, target angle was" + setPosition);
+
     }
 
-    public void elevatorPIDSetPower(){
-        m_elevatorMotor.set(output);
-        m_elevatorFollower.set(output);
-    }
 
     public void resetEncoder(){
         m_elevatorEncoder.reset();

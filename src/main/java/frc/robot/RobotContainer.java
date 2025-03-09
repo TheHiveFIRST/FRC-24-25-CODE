@@ -46,6 +46,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final LEDSubsystem m_LED = new LEDSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final StingerSubsystem m_stinger = new StingerSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -60,9 +62,14 @@ public class RobotContainer {
   public RobotContainer() {    // Configure the button bindings
 
     configureButtonBindings();
+    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
+    m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.27), m_stinger));
+    m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(0), m_LED));
+    
+
+  
     
     // Configure default commands
-    m_LED.setDefaultCommand(new RunCommand(()->m_LED.setPattern(0.41), m_LED));
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
@@ -92,16 +99,18 @@ public class RobotContainer {
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     
     new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(0, 0, 0))    
+    .whileTrue(setState(0, 0, 0)); 
+    //L4
     new JoystickButton(m_operatorController, Button.kY.value)
-    .whileTrue(new RunCommand(()->System.out.println("L3")));
+    .whileTrue(setState(0, 0, 0)); 
+    //L3
     
     new JoystickButton(m_operatorController, Button.kB.value)
-    .whileTrue(new RunCommand(()->System.out.println("L2")));
-    
+    .whileTrue(setState(0, 0, 0)); 
+    //L2
     new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(new RunCommand(()->System.out.println("Ground Intake")));
-
+    .whileTrue(setState(0, 0, 0)); 
+    //Ground Intake
     
   }
 
@@ -114,10 +123,10 @@ public class RobotContainer {
     return ishanaPath;
   }
   public Command setState(double elevatorPos, double intakePos, double colorLED){
-    return parallel();
-      
-
-    
+    return Commands.parallel(           
+    new RunCommand(() -> m_elevator.elevatorPIDControl(elevatorPos), m_elevator),
+    new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger),
+    new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));
   }
 
 }
