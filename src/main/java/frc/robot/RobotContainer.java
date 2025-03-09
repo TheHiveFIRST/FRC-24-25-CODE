@@ -14,24 +14,21 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
+// import frc.commands.IntakeCommand;
+// import frc.commands.ShootCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.StingerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import static edu.wpi.first.wpilibj2.command.Commands.parallel;
 
 //import java.util.HashMap;
 
@@ -45,29 +42,25 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
  // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
 
-  private final LEDSubsystem m_LED = new LEDSubsystem();
-
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-
 
   // private PathPlannerAuto ishanaPath = new PathPlannerAuto("Blue Side");
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
-   */  
+   */
+  
+  
   public RobotContainer() {    // Configure the button bindings
 
     configureButtonBindings();
     
     // Configure default commands
-    m_LED.setDefaultCommand(new RunCommand(()->m_LED.setPattern(0.41), m_LED));
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
@@ -78,9 +71,14 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
-  }
 
-   /* created by
+            // NamedCommands.registerCommand("shoot", new ShootCommand());
+            // NamedCommands.registerCommand("intake", new IntakeCommand());
+          }
+
+  /**
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
    * subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
@@ -88,26 +86,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_driverController, Button.kSquare.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kR1.value)
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-    
-    new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(0, 0, 0))    
-    new JoystickButton(m_operatorController, Button.kY.value)
-    .whileTrue(new RunCommand(()->System.out.println("L3")));
-    
-    new JoystickButton(m_operatorController, Button.kB.value)
-    .whileTrue(new RunCommand(()->System.out.println("L2")));
-    
-    new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(new RunCommand(()->System.out.println("Ground Intake")));
-
-    
+       
+        
   }
 
   /**
@@ -175,14 +161,6 @@ public class RobotContainer {
             System.out.println("Stopping intake...");
         })
     );
-  public Command getAutonomousCommand() {    
-    return ishanaPath;
-  }
-  public Command setState(double elevatorPos, double intakePos, double colorLED){
-    return parallel();
-      
-
-    
   }
 
 }
