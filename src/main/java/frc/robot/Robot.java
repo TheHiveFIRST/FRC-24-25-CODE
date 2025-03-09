@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -33,11 +34,19 @@ public class Robot extends TimedRobot {
   private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
+<<<<<<< HEAD
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();  // Ensuring DriveSubsystem is properly initialized
 
   // Variables
   private double setPos = 0;
   private double setAng = 0.32;
+=======
+  // private final DriveSubsystem m_robotDrive = new DriveSubsystem();  // Ensuring DriveSubsystem is properly initialized
+
+  // Variables
+  private double setPos = 0;
+  private double setAng = 0.295;
+>>>>>>> ddeba96e4c330deb0ce002349632e9bda18d9420
   private final DigitalInput limitSwitch = new DigitalInput(2);
   private final Timer m_timer = new Timer();
 
@@ -76,6 +85,7 @@ public class Robot extends TimedRobot {
   /** Runs the autonomous sequence */
   @Override
   public void autonomousPeriodic() {
+<<<<<<< HEAD
     System.out.println("Autonomous Timer: " + m_timer.get());  // Debug log
 
     if (m_timer.get() < 3.0) {
@@ -104,6 +114,36 @@ public class Robot extends TimedRobot {
     }
   }
 
+=======
+    // System.out.println("Autonomous Timer: " + m_timer.get());  // Debug log
+
+    // if (m_timer.get() < 3.0) {
+    //   m_robotDrive.drive(0, 0.5, 0, true);
+    //   System.out.println("Moving Forward...");
+    // } else {
+    //   m_robotDrive.drive(0, 0, 0, true); // Stop movement
+    //   System.out.println("Stopping...");
+
+    //   if (m_timer.get() > 3.0) {
+    //     m_StingerSubsystem.setIntakePower(0.5);
+    //     delayTimer(3);
+    //     m_timer.stop();
+    //   }
+    // }
+  }
+
+  /** Schedules a path-following command */
+  // public void runPath() {
+  //   Command pathCommand = new PathPlannerAuto("Ishana Path");
+  //   if (pathCommand != null) {
+  //     pathCommand.schedule();
+  //     System.out.println("Running Path: Ishana Path");
+  //   } else {
+  //     System.out.println("Failed to schedule Path");
+  //   }
+  // }
+
+>>>>>>> ddeba96e4c330deb0ce002349632e9bda18d9420
   @Override
   public void teleopInit() {
     if (m_autonomousCommand != null) {
@@ -126,7 +166,11 @@ public class Robot extends TimedRobot {
     } else if (m_operatorController.getRawButtonPressed(3)) {
       setElevatorAndPivot(33.3, 0.47);
     } else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)) {
+<<<<<<< HEAD
       setAng = 0.32; // Reset pivot angle
+=======
+      setAng = 0.295; // Reset pivot angle
+>>>>>>> ddeba96e4c330deb0ce002349632e9bda18d9420
     }
 
     if (m_operatorController.getRawButtonPressed(5)) {
@@ -173,4 +217,8 @@ public class Robot extends TimedRobot {
   public void delayTimer(int seconds) {
     m_timer.delay(seconds);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ddeba96e4c330deb0ce002349632e9bda18d9420

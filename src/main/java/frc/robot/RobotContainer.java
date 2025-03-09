@@ -23,8 +23,11 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.StingerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 //import java.util.HashMap;
@@ -41,11 +44,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+ // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-  private PathPlannerAuto ishanaPath = new PathPlannerAuto("Blue Side");
+  // private PathPlannerAuto ishanaPath = new PathPlannerAuto("Blue Side");
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -136,7 +140,27 @@ public class RobotContainer {
 
     // // Run path following command, then stop at the end.
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-    return ishanaPath;
+  return new SequentialCommandGroup(
+        new RunCommand(() -> m_robotDrive.drive(0.2, 0, 0, true), m_robotDrive)
+            .withTimeout(2),  // Move forward for 2 seconds
+        
+        new InstantCommand(() -> {
+            m_robotDrive.drive(0, 0, 0, true);
+            System.out.println("Stopping...");
+        }),
+
+        new InstantCommand(() -> {
+            //m_StingerSubsystem.setIntakePower(0.5);
+            System.out.println("Activating intake...");
+        }),
+
+        new WaitCommand(3),  // Wait for 3 seconds
+
+        new InstantCommand(() -> {
+            // m_StingerSubsystem.setIntakePower(0);
+            System.out.println("Stopping intake...");
+        })
+    );
   }
 
 }
