@@ -92,7 +92,7 @@ public class RobotContainer {
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     
     new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(0, 0, 0))    
+    .whileTrue(setState(0, 0, 0));    
     new JoystickButton(m_operatorController, Button.kY.value)
     .whileTrue(new RunCommand(()->System.out.println("L3")));
     
