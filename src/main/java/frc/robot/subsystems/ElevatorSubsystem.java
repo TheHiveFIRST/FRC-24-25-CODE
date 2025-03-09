@@ -33,9 +33,8 @@ SlewRateLimiter lessFast = new SlewRateLimiter(1);
 
         leftConfig = new SparkMaxConfig();
         rightConfig = new SparkMaxConfig();
-
-        leftConfig.idleMode(IdleMode.kBrake);
-        rightConfig.idleMode(IdleMode.kBrake);
+        leftConfig.idleMode(IdleMode.kCoast);
+        rightConfig.idleMode(IdleMode.kCoast);
 
         leftConfig.inverted(false);
         rightConfig.inverted(true);
@@ -68,6 +67,6 @@ SlewRateLimiter lessFast = new SlewRateLimiter(1);
     }
     
     public void encoderGetValue(){
-    // System.out.println("Encoder Position" + m_elevatorEncoder.getDistance());
+     System.out.println("Elevator Position" + m_elevatorEncoder.getDistance());
     }
 }
