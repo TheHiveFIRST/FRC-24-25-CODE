@@ -14,7 +14,6 @@ import frc.robot.Constants;
 
 public class StingerSubsystem extends SubsystemBase {
     // Variables
-    public SparkMax m_intakeMotor; 
     private SparkMax m_pivotMotor;
     private SparkMaxConfig pivotConfig;
     private AbsoluteEncoder m_absoluteEncoder;
@@ -23,10 +22,9 @@ public class StingerSubsystem extends SubsystemBase {
 
     // Constructors
     public StingerSubsystem() {
-        m_intakeMotor = new SparkMax(Constants.PivotConstants.kPintakeMotorId, MotorType.kBrushless);
         m_pivotMotor = new SparkMax(Constants.PivotConstants.kPivotMotorId, MotorType.kBrushless);
         pivotConfig = new SparkMaxConfig();
-        pivotConfig.idleMode(IdleMode.kCoast);
+        pivotConfig.idleMode(IdleMode.kBrake);
         pivotConfig.inverted(true);
         m_pivotMotor.configure(pivotConfig, null, null);
         
@@ -34,24 +32,21 @@ public class StingerSubsystem extends SubsystemBase {
         m_pivotPID = new PIDController(Constants.PivotConstants.pivotKP,Constants.PivotConstants.pivotKI, Constants.PivotConstants.pivotKD);
     }
 
-    // Methods
-    public void setIntakePower(double intakePower){
-        m_intakeMotor.set(intakePower);
-    }
+
 
     public void setPivotPower(double pivotPower){
         m_pivotMotor.set(pivotPower);
     }
 
     public void pivotPIDControl(double targetAngle) {
-        // pivotOutput = m_pivotPID.calculate(m_absoluteEncoder.getPosition(), targetAngle);
-        // m_pivotMotor.set(pivotOutput);  
+        pivotOutput = m_pivotPID.calculate(m_absoluteEncoder.getPosition(), targetAngle);
+        m_pivotMotor.set(pivotOutput);  
 
         System.out.println("pivot pid ran, target angle was" + targetAngle);
     }
 
-     public void encoderGetValue(){
-        System.out.println("Pivot Position" + m_absoluteEncoder.getPosition());
+     public double encoderGetValue(){
+        return m_absoluteEncoder.getPosition();
        }
 
 }

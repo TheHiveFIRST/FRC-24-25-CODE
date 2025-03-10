@@ -34,16 +34,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
-  Joystick m_operatorController = new Joystick(OIConstants.kOperatorControllerPort);
 
-  StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
-  ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  
-  LEDSubsystem m_LedSubsystem = new LEDSubsystem();
-  
-  double setPos;
-  double setAng = 0.32;
 
   DigitalInput limitSwitch = new DigitalInput(2);
  
@@ -160,91 +151,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-  //     if (m_operatorController.getRawButtonPressed(1)){
-  //       setPos = 0.1;
-  //       new WaitCommand(.5);
-  //       setAng = 0.5;
-  //     }
-  //     else if (m_operatorController.getRawButtonPressed(2)){
-  //       setPos = 12.5;
-  //       new WaitCommand(.5);
-  //       setAng = 0.5;
-  //     }
-  //     else if (m_operatorController.getRawButtonPressed(4)){
-  //       setPos = 22;
-  //       new WaitCommand(0.5);
-  //       setAng = 0.5;
-  //     }
-  //     if (m_operatorController.getRawButtonPressed(3)){
-  //       setPos = 33.3;
-  //       new WaitCommand(0.5);
-  //       setAng = 0.47;
-  //     }
-  //     else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)){
-  //       setAng = 0.32; //default/source angle 
-  //     }
-
-      // if (m_operatorController.getRawButtonPressed(1)){
-      //   setPos = 0.1;
-      //   new WaitCommand(.5);
-      //   setAng = 0.5;
-      // }
-      // else if (m_operatorController.getRawButtonPressed(2)){
-      //   setPos = 9.1; // L2 change 
-      //   new WaitCommand(.5);
-      //   setAng = 0.5;
-      // }
-      // else if (m_operatorController.getRawButtonPressed(4)){
-      //   setPos = 18.6;
-      //   new WaitCommand(0.5);
-      //   setAng = 0.5;
-      // }
-      // if (m_operatorController.getRawButtonPressed(3)){
-      //   setPos = 32.3;
-      //   new WaitCommand(0.5);
-      //   setAng = 0.53;
-      // }
-      // else if (m_operatorController.getRawButtonReleased(1) || m_operatorController.getRawButtonReleased(2) || m_operatorController.getRawButtonReleased(3) || m_operatorController.getRawButtonReleased(4)){
-      //   setAng = 0.27; //default/source angle 
-
-      // }
-      
-  //     if (m_operatorController.getRawButtonPressed(5)){
-  //       m_StingerSubsystem.setIntakePower(0.3);
-  //       m_LedSubsystem.setPattern(-0.99);
-  //     }
-  //     else if (m_operatorController.getRawButtonPressed(6)){
-  //       m_StingerSubsystem.setIntakePower(-0.5);
-  //       m_LedSubsystem.setPattern(0.57);
-  //     }
-  //     else if (m_operatorController.getRawButtonReleased(5) || m_operatorController.getRawButtonReleased(6)) {
-  //       m_StingerSubsystem.setIntakePower(0);
-  //       m_LedSubsystem.setPattern(0.41);
-  //     }
-  //     else if (m_operatorController.getRawButtonPressed(  7)){
-  //       setPos = 13;
-  //       new WaitCommand(0.5);
-  //       setAng = 0.45;
-  //     }
-  //     else if (m_operatorController.getRawButtonPressed(8)){
-  //       setPos = 25;
-  //       new WaitCommand(0.5);
-  //       setAng = 0.45;
-  //     }
-
-
-    
-  //     m_ElevatorSubsystem.elevatorPIDControl(setPos);
-  //     m_ElevatorSubsystem.elevatorPIDSetPower();
-  //     //calculate and set PID for motor
-
-  //     m_StingerSubsystem.PivotPIDControl(setAng);
-  //     m_StingerSubsystem.PivotPIDSetPower(); 
-  //     //calculate and set
-     
-  //     if (limitSwitch.get()){
-  //       m_ElevatorSubsystem.resetEncoder();
-  //     }
    }
   
 
