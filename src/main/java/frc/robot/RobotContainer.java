@@ -15,25 +15,26 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
-// import frc.commands.IntakeCommand;
-// import frc.commands.ShootCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.StingerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 //import java.util.HashMap;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.events.EventTrigger;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -44,6 +45,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final StingerSubsystem m_autonStinger = new StingerSubsystem(); 
+  private PathPlannerAuto ishanaPath = new PathPlannerAuto("start from the right auto 1");
+
  // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
 
   // The driver's controller
@@ -58,6 +62,20 @@ public class RobotContainer {
   
   public RobotContainer() {    // Configure the button bindings
 
+    NamedCommands.registerCommand("intake", new RunCommand( 
+      () -> m_autonStinger.setIntakePower(-0.1)));
+
+    NamedCommands.registerCommand("shoot", new RunCommand(
+      () -> m_autonStinger.setIntakePower(0.1)));
+    
+    new EventTrigger("intake").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(-0.1)));
+    new EventTrigger("shoot").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(0.1)));
+  
+
+    
+    
     configureButtonBindings();
     
     // Configure default commands
@@ -140,27 +158,28 @@ public class RobotContainer {
 
     // // Run path following command, then stop at the end.
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-  return new SequentialCommandGroup(
-        new RunCommand(() -> m_robotDrive.drive(0.2, 0, 0, true), m_robotDrive)
-            .withTimeout(2),  // Move forward for 2 seconds
+  // return new SequentialCommandGroup(
+  //       new RunCommand(() -> m_robotDrive.drive(0.2, 0, 0, true), m_robotDrive)
+  //           .withTimeout(2),  // Move forward for 2 seconds
         
-        new InstantCommand(() -> {
-            m_robotDrive.drive(0, 0, 0, true);
-            System.out.println("Stopping...");
-        }),
+  //       new InstantCommand(() -> {
+  //           m_robotDrive.drive(0, 0, 0, true);
+  //           System.out.println("Stopping...");
+  //       }),
 
-        new InstantCommand(() -> {
-            //m_StingerSubsystem.setIntakePower(0.5);
-            System.out.println("Activating intake...");
-        }),
+  //       new InstantCommand(() -> {
+  //           //m_StingerSubsystem.setIntakePower(0.5);
+  //           System.out.println("Activating intake...");
+  //       }),
 
-        new WaitCommand(3),  // Wait for 3 seconds
+  //       new WaitCommand(3),  // Wait for 3 seconds
 
-        new InstantCommand(() -> {
-            // m_StingerSubsystem.setIntakePower(0);
-            System.out.println("Stopping intake...");
-        })
-    );
+  //       new InstantCommand(() -> {
+  //           // m_StingerSubsystem.setIntakePower(0);
+  //           System.out.println("Stopping intake...");
+  //       })
+   // );
+   return ishanaPath; 
   }
 
 }

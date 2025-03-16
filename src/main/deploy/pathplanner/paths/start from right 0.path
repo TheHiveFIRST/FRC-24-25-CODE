@@ -76,19 +76,19 @@
     {
       "name": "shoot",
       "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 1.0,
       "command": null
     },
     {
       "name": "intake",
       "waypointRelativePos": 1,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 1,
       "command": null
     },
     {
       "name": "shoot",
       "waypointRelativePos": 1.5,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 1.5,
       "command": null
     }
   ],
