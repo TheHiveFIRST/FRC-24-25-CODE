@@ -34,13 +34,31 @@
   "eventMarkers": [
     {
       "name": "shoot",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 0.06576402321082907,
+      "waypointRelativePos": 0.0012894906511930733,
+      "endWaypointRelativePos": 0.20760799484203538,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "stopmotor",
+      "waypointRelativePos": 0.295293359123147,
+      "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "intake",
-      "waypointRelativePos": 0.7749838813668624,
+      "waypointRelativePos": 0.9555125725338506,
       "endWaypointRelativePos": 1.0,
       "command": null
     }

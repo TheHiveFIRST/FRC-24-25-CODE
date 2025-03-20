@@ -38,28 +38,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "shoot",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "intake",
-      "waypointRelativePos": 1,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "shoot",
-      "waypointRelativePos": 1,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "wait ",
-      "waypointRelativePos": 1,
-      "endWaypointRelativePos": null,
-      "command": null
+      "name": "pivotsource",
+      "waypointRelativePos": 0.4861379754996781,
+      "endWaypointRelativePos": 0.8214055448098035,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {

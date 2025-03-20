@@ -33,14 +33,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "wait ",
-      "waypointRelativePos": 0.0,
+      "name": "stopmotor",
+      "waypointRelativePos": 0.32624113475176253,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "shoot",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.9271437782076087,
       "endWaypointRelativePos": 1.0,
       "command": null
     }

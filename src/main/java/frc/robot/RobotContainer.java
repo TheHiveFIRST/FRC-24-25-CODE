@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +20,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.StingerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -35,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.EventTrigger;
+import com.pathplanner.lib.path.EventMarker;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -46,6 +49,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final StingerSubsystem m_autonStinger = new StingerSubsystem(); 
+  private final ElevatorSubsystem m_autonElevator = new ElevatorSubsystem(); 
   private PathPlannerAuto ishanaPath = new PathPlannerAuto("start from the right auto 1");
 
  // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
@@ -63,17 +67,29 @@ public class RobotContainer {
   public RobotContainer() {    // Configure the button bindings
 
     NamedCommands.registerCommand("intake", new RunCommand( 
-      () -> m_autonStinger.setIntakePower(-0.1)));
+      () -> m_autonStinger.setIntakePower(0.1)));
 
     NamedCommands.registerCommand("shoot", new RunCommand(
-      () -> m_autonStinger.setIntakePower(0.1)));
-    
-    new EventTrigger("intake").whileTrue(new RunCommand(
       () -> m_autonStinger.setIntakePower(-0.1)));
-    new EventTrigger("shoot").whileTrue(new RunCommand(
-      () -> m_autonStinger.setIntakePower(0.1)));
-  
+    NamedCommands.registerCommand("stopmotor", new RunCommand(
+      () -> m_autonStinger.setIntakePower(0)));
+    NamedCommands.registerCommand("pivotsource", new RunCommand(
+      () -> m_autonStinger.PivotPIDControl(0.32)));
+        
 
+    new EventTrigger("intake").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(0.1)));
+    new EventTrigger("shoot").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(-0.1)));
+    new EventTrigger("stopmotor").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(0)));
+
+    new EventTrigger("pivotsource").whileTrue(new RunCommand(
+      () -> m_autonStinger.PivotPIDControl(0.32)));
+    
+    // ishanaPath.event("pivotsource").whileTrue(new RunCommand(
+    //   () -> m_autonStinger.PivotPIDControl(0.32)
+    // ));
     
     
     configureButtonBindings();

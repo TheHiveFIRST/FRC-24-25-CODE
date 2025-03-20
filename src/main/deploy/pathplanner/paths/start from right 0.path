@@ -74,6 +74,18 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "Elevator Up",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Elevator Down",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "shoot",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 1.0,

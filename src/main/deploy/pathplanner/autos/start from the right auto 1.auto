@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "pivotsource"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 2.0
@@ -26,6 +32,12 @@
           "type": "wait",
           "data": {
             "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopmotor"
           }
         },
         {
@@ -60,6 +72,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "stopmotor"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -88,6 +106,18 @@
           "type": "wait",
           "data": {
             "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopmotor"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": []
           }
         }
       ]
