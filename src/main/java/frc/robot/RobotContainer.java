@@ -37,6 +37,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.EventTrigger;
+import com.pathplanner.lib.events.PointTowardsZoneEvent;
+import com.pathplanner.lib.events.PointTowardsZoneTrigger;
 import com.pathplanner.lib.path.EventMarker;
 
 /*
@@ -50,7 +52,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final StingerSubsystem m_autonStinger = new StingerSubsystem(); 
   private final ElevatorSubsystem m_autonElevator = new ElevatorSubsystem(); 
-  private PathPlannerAuto ishanaPath = new PathPlannerAuto("start from the right auto 1");
+  private PathPlannerAuto ishanaPath = new PathPlannerAuto("StraightFromMiddleAuto");
 
  // private final StingerSubsystem m_StingerSubsystem = new StingerSubsystem();
 
@@ -68,29 +70,32 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("intake", new RunCommand( 
       () -> m_autonStinger.setIntakePower(0.1)));
-
     NamedCommands.registerCommand("shoot", new RunCommand(
       () -> m_autonStinger.setIntakePower(-0.1)));
     NamedCommands.registerCommand("stopmotor", new RunCommand(
       () -> m_autonStinger.setIntakePower(0)));
-    NamedCommands.registerCommand("pivotsource", new RunCommand(
-      () -> m_autonStinger.PivotPIDControl(0.32)));
-        
+    NamedCommands.registerCommand("PivotL4", new RunCommand(
+      () -> m_autonStinger.PivotPIDControl(0.52)));
+    NamedCommands.registerCommand("ElevatorUp", new RunCommand(
+      () -> m_autonElevator.elevatorPIDControl(32.3)));
 
-    new EventTrigger("intake").whileTrue(new RunCommand(
+
+      
+    new EventTrigger("ElevatorUp").onTrue(new RunCommand(
+        () -> m_autonElevator.elevatorPIDControl(32.3)));
+    
+    new EventTrigger("PivotL4").onTrue(new RunCommand(
+        () -> m_autonStinger.PivotPIDControl(0.52)));    
+    // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(
+    //   () -> m_autonStinger.setIntakePower(-0.1)));
+
+    new EventTrigger("shoot").onTrue(new RunCommand(
       () -> m_autonStinger.setIntakePower(0.1)));
-    new EventTrigger("shoot").whileTrue(new RunCommand(
-      () -> m_autonStinger.setIntakePower(-0.1)));
-    new EventTrigger("stopmotor").whileTrue(new RunCommand(
-      () -> m_autonStinger.setIntakePower(0)));
 
-    new EventTrigger("pivotsource").whileTrue(new RunCommand(
-      () -> m_autonStinger.PivotPIDControl(0.32)));
-    
-    // ishanaPath.event("pivotsource").whileTrue(new RunCommand(
-    //   () -> m_autonStinger.PivotPIDControl(0.32)
-    // ));
-    
+    //ishanaPath.event("shoot").onTrue(NamedCommands.getCommand("shoot")); 
+   // new EventTrigger("shoot").whileTrue(NamedCommands.getCommand("shoot"));
+
+  
     
     configureButtonBindings();
     
@@ -136,66 +141,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    // TrajectoryConfig config = new TrajectoryConfig(
-    //     AutoConstants.kMaxSpeedMetersPerSecond,
-    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-    //     // Add kinematics to ensure max speed is actually obeyed
-    //     .setKinematics(DriveConstants.kDriveKinematics);
-
-    // // An example trajectory to follow. All units in meters.
-    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    //     // Start at the origin facing the +X direction
-    //     new Pose2d(0, 0, new Rotation2d(0)),
-    //     // Pass through these two interior waypoints, making an 's' curve path
-    //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    //     // End 3 meters straight ahead of where we started, facing forward
-    //     new Pose2d(3, 0, new Rotation2d(0)),
-    //     config);
-
-    // var thetaController = new ProfiledPIDController(
-    //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    //     exampleTrajectory,
-    //     m_robotDrive::getPose, // Functional interface to feed supplier
-    //     DriveConstants.kDriveKinematics,
-
-    //     // Position controllers
-    //     new PIDController(AutoConstants.kPXController, 0, 0),
-    //     new PIDController(AutoConstants.kPYController, 0, 0),
-    //     thetaController,
-    //     m_robotDrive::setModuleStates,
-    //     m_robotDrive);
-
-    // // Reset odometry to the starting pose of the trajectory.
-    // m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // // Run path following command, then stop at the end.
-    // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-  // return new SequentialCommandGroup(
-  //       new RunCommand(() -> m_robotDrive.drive(0.2, 0, 0, true), m_robotDrive)
-  //           .withTimeout(2),  // Move forward for 2 seconds
-        
-  //       new InstantCommand(() -> {
-  //           m_robotDrive.drive(0, 0, 0, true);
-  //           System.out.println("Stopping...");
-  //       }),
-
-  //       new InstantCommand(() -> {
-  //           //m_StingerSubsystem.setIntakePower(0.5);
-  //           System.out.println("Activating intake...");
-  //       }),
-
-  //       new WaitCommand(3),  // Wait for 3 seconds
-
-  //       new InstantCommand(() -> {
-  //           // m_StingerSubsystem.setIntakePower(0);
-  //           System.out.println("Stopping intake...");
-  //       })
-   // );
    return ishanaPath; 
-  }
-
+}
 }

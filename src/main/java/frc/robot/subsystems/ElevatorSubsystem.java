@@ -55,12 +55,14 @@ SlewRateLimiter lessFast = new SlewRateLimiter(1);
         output = m_elevatorPID.calculate(m_elevatorEncoder.getDistance(), setPosition) ;
         //System.out.println("Encoder Position" + m_elevatorEncoder.getDistance());
         //System.out.println("Set Position" + setPosition);
-    }
-
-    public void elevatorPIDSetPower(){
         m_elevatorMotor.set(output);
         m_elevatorFollower.set(output);
     }
+
+    // public void elevatorPIDSetPower(){
+    //     m_elevatorMotor.set(output);
+    //     m_elevatorFollower.set(output);
+    // }
 
     public void resetEncoder(){
         m_elevatorEncoder.reset();

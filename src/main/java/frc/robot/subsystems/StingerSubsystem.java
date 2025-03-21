@@ -26,7 +26,7 @@ public class StingerSubsystem extends SubsystemBase {
         m_intakeMotor = new SparkMax(Constants.PivotConstants.kPintakeMotorId, MotorType.kBrushless);
         m_pivotMotor = new SparkMax(Constants.PivotConstants.kPivotMotorId, MotorType.kBrushless);
         pivotConfig = new SparkMaxConfig();
-        pivotConfig.idleMode(IdleMode.kCoast);
+        pivotConfig.idleMode(IdleMode.kBrake);
         pivotConfig.inverted(true);
         m_pivotMotor.configure(pivotConfig, null, null);
         
@@ -47,11 +47,12 @@ public class StingerSubsystem extends SubsystemBase {
          pivotOutput = m_pivotPID.calculate(m_absoluteEncoder.getPosition(), targetAngle);
        // System.out.println("pivot encoder value"+m_absoluteEncoder.getPosition());
         //System.out.println("pivot set position"+ targetAngle);
-    }
-    public void PivotPIDSetPower(){
         m_pivotMotor.set(pivotOutput);  
+    }
+    // public void PivotPIDSetPower(){
+    //     m_pivotMotor.set(pivotOutput);  
         
-     }
+    //  }
      public void encoderGetValue(){
         System.out.println("Pivot Position" + m_absoluteEncoder.getPosition());
        }
