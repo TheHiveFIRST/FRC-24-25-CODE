@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
@@ -31,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static edu.wpi.first.wpilibj2.command.Commands.parallel;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
@@ -56,10 +57,15 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final StingerSubsystem m_stinger = new StingerSubsystem();
   private final OuttakeSubsystem m_outtake = new OuttakeSubsystem();
+ // private final DigitalInput limitSwitch = new DigitalInput(2);
+
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  double driveSpeed = 1;
+  double SLOW_MODE_MULTIPLIER = 0.5;
+  //Trigger limitSwitchActivation = new Trigger(limitSwitch::get);
 
 
   private PathPlannerAuto ishanaPath = new PathPlannerAuto("Blue Side");
@@ -80,15 +86,18 @@ public class RobotContainer {
     
     // Configure default commands
     m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true),
-            m_robotDrive));
+      new RunCommand(
+          () -> {
+              boolean slowMode = m_driverController.getLeftBumper(); // Use Left Bumper for slow mode
+              double currentDriveSpeed = slowMode ? driveSpeed * SLOW_MODE_MULTIPLIER : driveSpeed;
+  
+              m_robotDrive.drive(
+                  -MathUtil.applyDeadband((m_driverController.getLeftY() * currentDriveSpeed), OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband((m_driverController.getLeftX() * currentDriveSpeed), OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband((m_driverController.getRightX() * currentDriveSpeed), OIConstants.kDriveDeadband),
+                  true);
+          },
+          m_robotDrive));
   }
 
    /* created by
@@ -112,16 +121,16 @@ public class RobotContainer {
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     
     new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(32.3, .52, 0.91)); 
+    .whileTrue(setState(32.3, .52, 0.93)); 
     //L4
     new JoystickButton(m_operatorController, Button.kY.value)
-    .whileTrue(setState(18.6, .5, 0.81)); 
+    .whileTrue(setState(18.6, .5, 0.77)); 
     //L3
     new JoystickButton(m_operatorController, Button.kB.value)
-    .whileTrue(setState(9.1, 0.5, 0.73)); 
+    .whileTrue(setState(9.1, 0.5, 0.69)); 
     //L2
     new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(setState(0.1, 0.5, 0.57)); 
+    .whileTrue(setState(0.1, 0.5, 0.61)); 
     //Ground Intake
   
   
@@ -130,10 +139,17 @@ public class RobotContainer {
     //Intaking Coral/Outtaking Algae
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
     .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3), m_outtake));
+
     //Outtaking Coral/Intaking Algae
 
-   dpadDown.whileTrue(bargeShot());
-
+   dpadUp.whileTrue(bargeShot(-0.09));
+   //barge shot
+   
+   dpadLeft.whileTrue(setState(13, 0.45, 0.81));
+   // Algae Low Intake
+   dpadRight.whileTrue(setState(25, 0.45, 0.87));
+   //new Button(limitSwitch).whileTrue(m_elevator.resetEncoder());
+  //limitSwitchActivation.whileTrue(new RunCommand(()->System.out.println("limit switch trigger" + m_elevator.encoderGetValue()), m_elevator));
   }
 
   /**
@@ -151,17 +167,34 @@ public class RobotContainer {
     new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));
   }
 
-  public Command bargeShot(){
-    return Commands.sequence(
-      new RunCommand(()->m_stinger.pivotPIDControl(.5), m_stinger),
+  public Command bargeShot(double colorLED) {
+    return Commands.parallel(
+        // Move the elevator to 32.3
 
-      new RunCommand(()-> m_elevator.elevatorPIDControl(32.3), m_elevator),
-      waitUntil(()->m_elevator.encoderGetValue() > 31),
-      new RunCommand(()->m_stinger.pivotPIDControl(.1), m_stinger),
-      waitUntil(()->m_stinger.encoderGetValue() > 0.6),
-      new RunCommand(()-> m_outtake.setIntakePower(1), m_outtake)
+        new RunCommand(() -> m_elevator.elevatorPIDControl(32.3), m_elevator),
+        new RunCommand(() -> m_LED.setPattern(colorLED), m_LED),
+
+
+        // Control the pivot: Start at 0.3, then move to 1 when the elevator is above 30
+
+        new RunCommand(() -> {
+            if (m_elevator.encoderGetValue() > 27) {
+                m_stinger.pivotPIDControl(0.3);
+            } 
+            else {
+                m_stinger.pivotPIDControl(0.5);
+            }
+        }, m_stinger),
+        new RunCommand(()->{
+          if (m_stinger.encoderGetValue() < .38 && m_elevator.encoderGetValue() > 30 ){
+            m_outtake.setIntakePower(1);
+          } else {
+            m_outtake.setIntakePower(-0.3);
+          }
+        },  m_outtake)
 
     );
-  }
+}
+
 
 }
