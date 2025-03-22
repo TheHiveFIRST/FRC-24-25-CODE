@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.516290983606557,
+        "x": 7.144672131147541,
         "y": 4.1748463114754095
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.922456988727925,
-        "y": 4.1646431899161955
+        "x": 7.638482830044183,
+        "y": 4.1841555264242585
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.06577868852459,
+        "x": 5.742110655737705,
         "y": 4.1748463114754095
       },
       "prevControl": {
-        "x": 5.815809667628667,
-        "y": 4.178781866370646
+        "x": 5.4921550676425035,
+        "y": 4.170134201546557
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "PivotL3",
+      "waypointRelativePos": 0.31,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PivotL3"
+        }
+      }
+    },
+    {
       "name": "ElevatorUp",
-      "waypointRelativePos": 0.33139909735654216,
+      "waypointRelativePos": 0.54,
       "endWaypointRelativePos": 1.0,
       "command": {
         "type": "named",
@@ -44,16 +55,15 @@
       }
     },
     {
-      "name": "pivotsource",
-      "waypointRelativePos": 0.33139909735654494,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
       "name": "shoot",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 1.0,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "shoot"
+        }
+      }
     }
   ],
   "globalConstraints": {

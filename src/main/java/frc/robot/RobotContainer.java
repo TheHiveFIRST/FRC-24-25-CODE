@@ -68,31 +68,34 @@ public class RobotContainer {
   
   public RobotContainer() {    // Configure the button bindings
 
-    NamedCommands.registerCommand("intake", new RunCommand( 
-      () -> m_autonStinger.setIntakePower(0.1)));
+    //NamedCommands.registerCommand("intake", new RunCommand( 
+      //() -> m_autonStinger.setIntakePower(0.1)));
     NamedCommands.registerCommand("shoot", new RunCommand(
-      () -> m_autonStinger.setIntakePower(-0.1)));
-    NamedCommands.registerCommand("stopmotor", new RunCommand(
-      () -> m_autonStinger.setIntakePower(0)));
-    NamedCommands.registerCommand("PivotL4", new RunCommand(
-      () -> m_autonStinger.PivotPIDControl(0.52)));
+      () -> m_autonStinger.setIntakePower(-0.3)));
+   // NamedCommands.registerCommand("stopmotor", new RunCommand(
+      //() -> m_autonStinger.setIntakePower(0)));
+    NamedCommands.registerCommand("PivotL3", new RunCommand(
+      () -> m_autonStinger.PivotPIDControl(0.5)));
     NamedCommands.registerCommand("ElevatorUp", new RunCommand(
-      () -> m_autonElevator.elevatorPIDControl(32.3)));
+      () -> m_autonElevator.elevatorPIDControl(18.6)));
 
 
       
     new EventTrigger("ElevatorUp").onTrue(new RunCommand(
-        () -> m_autonElevator.elevatorPIDControl(32.3)));
+        () -> m_autonElevator.elevatorPIDControl(18.6
+        )));
     
-    new EventTrigger("PivotL4").onTrue(new RunCommand(
-        () -> m_autonStinger.PivotPIDControl(0.52)));    
+    new EventTrigger("PivotL3").onTrue(new RunCommand(
+        () -> m_autonStinger.PivotPIDControl(0.5)));
+    
     // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(
     //   () -> m_autonStinger.setIntakePower(-0.1)));
 
     new EventTrigger("shoot").onTrue(new RunCommand(
-      () -> m_autonStinger.setIntakePower(0.1)));
+      () -> m_autonStinger.setIntakePower(-0.3)));
 
-    //ishanaPath.event("shoot").onTrue(NamedCommands.getCommand("shoot")); 
+    //ishanaPath.event("shoot").whileTrue(new RunCommand(
+     // () -> m_autonStinger.setIntakePower(-0.3))); 
    // new EventTrigger("shoot").whileTrue(NamedCommands.getCommand("shoot"));
 
   
