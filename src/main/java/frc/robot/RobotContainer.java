@@ -74,18 +74,18 @@ public class RobotContainer {
       () -> m_autonStinger.setIntakePower(-0.3)));
    // NamedCommands.registerCommand("stopmotor", new RunCommand(
       //() -> m_autonStinger.setIntakePower(0)));
-    NamedCommands.registerCommand("PivotL3", new RunCommand(
+    NamedCommands.registerCommand("PivotL4", new RunCommand(
       () -> m_autonStinger.PivotPIDControl(0.5)));
     NamedCommands.registerCommand("ElevatorUp", new RunCommand(
-      () -> m_autonElevator.elevatorPIDControl(18.6)));
+      () -> m_autonElevator.elevatorPIDControl(32.3)));
 
 
       
     new EventTrigger("ElevatorUp").onTrue(new RunCommand(
-        () -> m_autonElevator.elevatorPIDControl(18.6
+        () -> m_autonElevator.elevatorPIDControl(32.3
         )));
     
-    new EventTrigger("PivotL3").onTrue(new RunCommand(
+    new EventTrigger("PivotL4").onTrue(new RunCommand(
         () -> m_autonStinger.PivotPIDControl(0.5)));
     
     // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(

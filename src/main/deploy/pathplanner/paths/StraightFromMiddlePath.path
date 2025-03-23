@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "PivotL4",
-      "waypointRelativePos": 0.31,
+      "waypointRelativePos": 0.3778207607994828,
       "endWaypointRelativePos": 1.0,
       "command": {
         "type": "named",
