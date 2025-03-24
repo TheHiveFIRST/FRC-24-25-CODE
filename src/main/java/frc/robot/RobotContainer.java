@@ -14,8 +14,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.commands.AlignToReefTagRelative;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -57,6 +59,8 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final StingerSubsystem m_stinger = new StingerSubsystem();
   private final OuttakeSubsystem m_outtake = new OuttakeSubsystem();
+ // private final DigitalInput limitSwitch = new DigitalInput(2);
+
  // private final DigitalInput limitSwitch = new DigitalInput(2);
 
 
@@ -139,6 +143,8 @@ public class RobotContainer {
     //Intaking Coral/Outtaking Algae
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
     .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3), m_outtake));
+    // new JoystickButton(m_driverController, Button.kA.value)
+    // .whileTrue(new AlignToReefTagRelative(false, m_robotDrive));
 
     //Outtaking Coral/Intaking Algae
 
