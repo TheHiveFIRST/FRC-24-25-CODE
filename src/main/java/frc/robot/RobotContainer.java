@@ -40,10 +40,13 @@ import static edu.wpi.first.wpilibj2.command.Commands.parallel;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.waitUntil;
 
+import java.util.function.IntFunction;
+
 //import java.util.HashMap;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.events.EventTrigger;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -59,7 +62,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final StingerSubsystem m_stinger = new StingerSubsystem();
   private final OuttakeSubsystem m_outtake = new OuttakeSubsystem();
- // private final DigitalInput limitSwitch = new DigitalInput(2);
+  private final DigitalInput limitSwitch = new DigitalInput(2);
 
  // private final DigitalInput limitSwitch = new DigitalInput(2);
 
@@ -69,19 +72,49 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   double driveSpeed = 1;
   double SLOW_MODE_MULTIPLIER = 0.5;
-  //Trigger limitSwitchActivation = new Trigger(limitSwitch::get);
+  Trigger limitSwitchActivation = new Trigger(limitSwitch::get);
 
 
-  private PathPlannerAuto ishanaPath = new PathPlannerAuto("Blue Side");
+  private PathPlannerAuto straightPath = new PathPlannerAuto("StraightFromMiddleAuto");
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */  
-  public RobotContainer() {    // Configure the button bindings
+  public RobotContainer() {  
+        //NamedCommands.registerCommand("intake", new RunCommand( 
+      //() -> m_autonStinger.setIntakePower(0.1)));
+    NamedCommands.registerCommand("shoot", new RunCommand(
+      () -> m_outtake.setIntakePower(-0.3)));
+    NamedCommands.registerCommand("stopmotor", new RunCommand(
+      () -> m_outtake.setIntakePower(0)));
+    NamedCommands.registerCommand("PivotL4", new RunCommand(
+      () -> m_stinger.pivotPIDControl(0.5)));
+    NamedCommands.registerCommand("ElevatorUp", new RunCommand(
+      () -> m_elevator.elevatorPIDControl(32.3)));
 
+
+
+      
+    new EventTrigger("ElevatorUp").onTrue(new RunCommand(
+        () -> m_elevator.elevatorPIDControl(32.3
+        )));
+    
+    new EventTrigger("PivotL4").onTrue(new RunCommand(
+        () -> m_stinger.pivotPIDControl(0.5)));
+    
+    // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(
+    //   () -> m_autonStinger.setIntakePower(-0.1)));
+
+    new EventTrigger("shoot").whileTrue(new RunCommand(
+      () -> m_outtake.setIntakePower(-0.3), m_outtake));
+
+    new EventTrigger("stopmotor").whileTrue(new RunCommand(
+      () -> m_outtake.setIntakePower(0), m_outtake));  // Configure the button bindings
+
+    
     configureButtonBindings();
-    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
-    m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
+    //m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
+   // m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
     m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0), m_outtake));
     m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
     
@@ -125,7 +158,7 @@ public class RobotContainer {
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     
     new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(32.3, .52, 0.93)); 
+    .whileTrue(setState(30, .52, 0.93)); 
     //L4
     new JoystickButton(m_operatorController, Button.kY.value)
     .whileTrue(setState(18.6, .5, 0.77)); 
@@ -134,8 +167,8 @@ public class RobotContainer {
     .whileTrue(setState(9.1, 0.5, 0.69)); 
     //L2
     new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(setState(0.1, 0.5, 0.61)); 
-    //Ground Intake
+    .whileTrue(setState(0.5, 0.37, 0.41)); 
+    //Intake
   
   
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
@@ -153,9 +186,20 @@ public class RobotContainer {
    
    dpadLeft.whileTrue(setState(13, 0.45, 0.81));
    // Algae Low Intake
+   dpadDown.whileTrue(setState(0.1, 0.5, 0.61));
    dpadRight.whileTrue(setState(25, 0.45, 0.87));
-   //new Button(limitSwitch).whileTrue(m_elevator.resetEncoder());
-  //limitSwitchActivation.whileTrue(new RunCommand(()->System.out.println("limit switch trigger" + m_elevator.encoderGetValue()), m_elevator));
+  
+  new JoystickButton(m_driverController, Button.kStart.value)
+   .whileTrue(new RunCommand(()->m_elevator.resetEncoder(), m_elevator));
+   limitSwitchActivation.whileTrue(
+    new RunCommand(() -> {
+      if (m_elevator.encoderGetValue() < 5) {
+          m_elevator.resetEncoder();
+      } 
+      else {
+          m_elevator.stuckCoral();
+      }
+  }, m_elevator));
   }
 
   /**
@@ -164,7 +208,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {    
-    return ishanaPath;
+    return straightPath;
   }
   public Command setState(double elevatorPos, double intakePos, double colorLED){
     return Commands.parallel(           
@@ -177,7 +221,7 @@ public class RobotContainer {
     return Commands.parallel(
         // Move the elevator to 32.3
 
-        new RunCommand(() -> m_elevator.elevatorPIDControl(32.3), m_elevator),
+        new RunCommand(() -> m_elevator.elevatorPIDControl(30), m_elevator),
         new RunCommand(() -> m_LED.setPattern(colorLED), m_LED),
 
 
@@ -188,7 +232,7 @@ public class RobotContainer {
                 m_stinger.pivotPIDControl(0.3);
             } 
             else {
-                m_stinger.pivotPIDControl(0.5);
+                m_stinger.pivotPIDControl(0.1);
             }
         }, m_stinger),
         new RunCommand(()->{

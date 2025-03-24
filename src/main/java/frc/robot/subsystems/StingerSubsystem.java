@@ -33,7 +33,7 @@ public class StingerSubsystem extends SubsystemBase {
     }
 
 
-
+//hi :)
     public void setPivotPower(double pivotPower){
         m_pivotMotor.set(pivotPower);
     }
@@ -42,7 +42,7 @@ public class StingerSubsystem extends SubsystemBase {
         pivotOutput = m_pivotPID.calculate(m_absoluteEncoder.getPosition(), targetAngle);
         m_pivotMotor.set(pivotOutput);  
 
-        System.out.println("pivot pid ran, target angle was" + targetAngle);
+        //System.out.println("pivot pid ran, target angle was" + targetAngle);
     }
 
      public double encoderGetValue(){

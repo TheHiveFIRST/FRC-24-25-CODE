@@ -7,32 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "straight4ft"
+            "pathName": "StraightFromMiddlePath"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
+            "pathName": "StraightFromMiddlePath2"
           }
         }
       ]
