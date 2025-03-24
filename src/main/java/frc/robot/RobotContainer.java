@@ -93,9 +93,10 @@ public class RobotContainer {
     //   () -> m_autonStinger.setIntakePower(-0.1)));
 
     new EventTrigger("shoot").whileTrue(new RunCommand(
-      () -> m_autonStinger.setIntakePower(-0.3)));
+      () -> m_autonStinger.setIntakePower(-0.3), m_autonStinger));
 
-    new EventTrigger("stopmotor").whileTrue(NamedCommands.getCommand("stopmotor"));
+    new EventTrigger("stopmotor").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(0), m_autonStinger));
 
    // ishanaPath.event("stopmotor").whileTrue(new RunCommand(
      // () -> m_autonStinger.setIntakePower(0))); 
