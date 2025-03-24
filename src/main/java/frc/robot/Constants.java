@@ -103,7 +103,7 @@ public final class Constants {
   public static final class ElevatorConstants {   
     public static final int kElevatorMotorCanId = 10;
     public static final int kElevatorFollowerCanId = 9;
-    public static final double KP = 0.3;
+    public static final double KP = 0.28;
     public static final double KI = 0;
     public static final double KD = 0.01;
     public static final int KEncoderChannelA = 0;
