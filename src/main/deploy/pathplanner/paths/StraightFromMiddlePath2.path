@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.145,
-        "y": 4.1748463114754095
+        "x": 5.742,
+        "y": 4.175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.638810698896642,
-        "y": 4.1841555264242585
+        "x": 6.235810698896643,
+        "y": 4.184309214948849
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.742,
-        "y": 4.1748463114754095
+        "x": 7.145,
+        "y": 4.175
       },
       "prevControl": {
-        "x": 5.492044411904798,
-        "y": 4.170134201546557
+        "x": 6.895044411904798,
+        "y": 4.1702878900711475
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,35 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "PivotL4",
-      "waypointRelativePos": 0.4,
-      "endWaypointRelativePos": 1.0,
+      "name": "stopmotor",
+      "waypointRelativePos": 0.2,
+      "endWaypointRelativePos": 0.2571614583333303,
       "command": {
         "type": "named",
         "data": {
-          "name": "PivotL4"
-        }
-      }
-    },
-    {
-      "name": "ElevatorUp",
-      "waypointRelativePos": 0.55,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ElevatorUp"
-        }
-      }
-    },
-    {
-      "name": "shoot",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "shoot"
+          "name": "stopmotor"
         }
       }
     }

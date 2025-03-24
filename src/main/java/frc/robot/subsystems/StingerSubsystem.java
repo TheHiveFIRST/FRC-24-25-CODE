@@ -37,6 +37,7 @@ public class StingerSubsystem extends SubsystemBase {
     // Methods
     public void setIntakePower(double intakePower){
         m_intakeMotor.set(intakePower);
+        System.out.println("shooting" +intakePower);
     }
 
     public void setPivotPower(double pivotPower){

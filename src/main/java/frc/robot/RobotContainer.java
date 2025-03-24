@@ -80,6 +80,7 @@ public class RobotContainer {
       () -> m_autonElevator.elevatorPIDControl(32.3)));
 
 
+
       
     new EventTrigger("ElevatorUp").onTrue(new RunCommand(
         () -> m_autonElevator.elevatorPIDControl(32.3
@@ -91,8 +92,11 @@ public class RobotContainer {
     // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(
     //   () -> m_autonStinger.setIntakePower(-0.1)));
 
-    new EventTrigger("shoot").onTrue(new RunCommand(
+    new EventTrigger("shoot").whileTrue(new RunCommand(
       () -> m_autonStinger.setIntakePower(-0.3)));
+
+    new EventTrigger("stopmotor").whileTrue(new RunCommand(
+      () -> m_autonStinger.setIntakePower(0)));
 
    // ishanaPath.event("stopmotor").whileTrue(new RunCommand(
      // () -> m_autonStinger.setIntakePower(0))); 
