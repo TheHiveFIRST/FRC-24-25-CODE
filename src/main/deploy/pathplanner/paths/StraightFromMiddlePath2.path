@@ -35,7 +35,7 @@
     {
       "name": "stopmotor",
       "waypointRelativePos": 0.2,
-      "endWaypointRelativePos": 0.2571614583333303,
+      "endWaypointRelativePos": 1.0,
       "command": {
         "type": "named",
         "data": {
