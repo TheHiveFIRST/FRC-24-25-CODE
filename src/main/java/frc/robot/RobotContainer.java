@@ -57,12 +57,12 @@ import com.pathplanner.lib.events.EventTrigger;
 public class RobotContainer {
 
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final LEDSubsystem m_LED = new LEDSubsystem();
-  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-  private final StingerSubsystem m_stinger = new StingerSubsystem();
-  private final OuttakeSubsystem m_outtake = new OuttakeSubsystem();
-  private final DigitalInput limitSwitch = new DigitalInput(2);
+  private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final static LEDSubsystem m_LED = new LEDSubsystem();
+  private final static ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final static StingerSubsystem m_stinger = new StingerSubsystem();
+  private final static OuttakeSubsystem m_outtake = new OuttakeSubsystem();
+  private final static DigitalInput limitSwitch = new DigitalInput(2);
 
  // private final DigitalInput limitSwitch = new DigitalInput(2);
 
@@ -117,6 +117,8 @@ public class RobotContainer {
    // m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
     m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0), m_outtake));
     m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
+
+  
     
 
   
@@ -135,6 +137,12 @@ public class RobotContainer {
                   true);
           },
           m_robotDrive));
+  }
+
+  public static void  runDuringTeleop(){
+    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
+   m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
+   
   }
 
    /* created by
