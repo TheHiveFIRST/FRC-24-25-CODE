@@ -108,9 +108,10 @@ public final class Constants {
     public static final double KD = 0.01;
     public static final int KEncoderChannelA = 0;
     public static final int KEncoderChannelB = 1;
-    public static final int BOTTOM_POSITION = 0;
-    public static final int MIDDLE_POSITION = 0;
-    public static final double TOP_POSITION = 5;
+    public static final double elevatorIntakePosition = 0.5;
+    public static final double elevatorL4Position = 30;
+    public static final double elevatorL3Position = 18.6;
+    public static final double elevatorL2Position = 9.1;
     public static final double ELEVATOR_SPEED = 1;
 
 
@@ -121,9 +122,10 @@ public final class Constants {
     public static final double pivotKP = 1.4; 
     public static final double pivotKI = 0;
     public static final double pivotKD = 0.05;
-    public static final double pivotSOURCE_POSITION = 0.32;
-    public static final double pivotL2L3_POSITION = 0.5;
-    public static final double pivotL4_POSITION = 0.7;
+    public static final double intakeL4Position = 0.52;
+    public static final double intakeL3Position = 0.5;
+    public static final double intakeL2Position = 0.5;
+    public static final double intakePosition = 0.37;
     
   }
   public static final class AutoAlignConstants{
@@ -137,7 +139,6 @@ public final class Constants {
     public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.02;
     public static final double Y_SETPOINT_REEF_ALIGNMENT = 0.16;  // Horizontal pose
     public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.02;
-  
     public static final double DONT_SEE_TAG_WAIT_TIME = 1;
     public static final double POSE_VALIDATION_TIME = 0.3;
   

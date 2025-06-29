@@ -81,8 +81,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */  
   public RobotContainer() {  
-        //NamedCommands.registerCommand("intake", new RunCommand( 
-      //() -> m_autonStinger.setIntakePower(0.1)));
     NamedCommands.registerCommand("shoot", new RunCommand(
       () -> m_outtake.setIntakePower(-0.3)));
     NamedCommands.registerCommand("stopmotor", new RunCommand(
@@ -118,16 +116,12 @@ public class RobotContainer {
     m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0), m_outtake));
     m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
 
-  
-    
-
-  
     
     // Configure default commands
     m_robotDrive.setDefaultCommand(
       new RunCommand(
           () -> {
-              boolean slowMode = m_driverController.getLeftBumper(); // Use Left Bumper for slow mode
+              boolean slowMode = m_driverController.getLeftBumperButton(); // Use Left Bumper for slow mode
               double currentDriveSpeed = slowMode ? driveSpeed * SLOW_MODE_MULTIPLIER : driveSpeed;
   
               m_robotDrive.drive(
@@ -166,16 +160,16 @@ public class RobotContainer {
             .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     
     new JoystickButton(m_operatorController, Button.kX.value)
-    .whileTrue(setState(30, .52, 0.93)); 
+    .whileTrue(setState(Constants.ElevatorConstants.elevatorL4Position, Constants.PivotConstants.intakeL4Position, 0.93)); 
     //L4
     new JoystickButton(m_operatorController, Button.kY.value)
-    .whileTrue(setState(18.6, .5, 0.77)); 
+    .whileTrue(setState(Constants.ElevatorConstants.elevatorL3Position, Constants.PivotConstants.intakeL3Position, 0.77)); 
     //L3
     new JoystickButton(m_operatorController, Button.kB.value)
-    .whileTrue(setState(9.1, 0.5, 0.69)); 
+    .whileTrue(setState(Constants.ElevatorConstants.elevatorL2Position, Constants.PivotConstants.intakeL2Position, 0.69)); 
     //L2
     new JoystickButton(m_operatorController, Button.kA.value)
-    .whileTrue(setState(0.5, 0.37, 0.41)); 
+    .whileTrue(setState(Constants.ElevatorConstants.elevatorIntakePosition, Constants.PivotConstants.intakePosition, 0.41)); 
     //Intake
   
   
@@ -192,10 +186,9 @@ public class RobotContainer {
    dpadUp.whileTrue(bargeShot(-0.09));
    //barge shot
    
-   dpadLeft.whileTrue(setState(13, 0.45, 0.81));
-   // Algae Low Intake
-   dpadDown.whileTrue(setState(0.1, 0.5, 0.61));
-   dpadRight.whileTrue(setState(25, 0.45, 0.87));
+   dpadLeft.whileTrue(setState(13, 0.45, 0.81)); //Algae Low Reef Intake
+   dpadDown.whileTrue(setState(0.1, 0.5, 0.61)); // Algae Low Intake
+   dpadRight.whileTrue(setState(25, 0.45, 0.87)); //Algae High Reef outtake
   
   new JoystickButton(m_driverController, Button.kStart.value)
    .whileTrue(new RunCommand(()->m_elevator.resetEncoder(), m_elevator));
