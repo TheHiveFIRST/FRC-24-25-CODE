@@ -10,16 +10,17 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-//import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
-
 public class OuttakeSubsystem extends SubsystemBase {
     // Variables
-    public SparkMax m_intakeMotor; 
+    private SparkMax m_intakeMotor; 
+    private SparkMaxConfig intakeMotorConfig; 
+
 
 
     // Constructors
     public OuttakeSubsystem() {
         m_intakeMotor = new SparkMax(Constants.PivotConstants.kPintakeMotorId, MotorType.kBrushless);
+        intakeMotorConfig.
     }
 
     // Methods
