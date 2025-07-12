@@ -16,7 +16,7 @@ public class OuttakeCommand extends Command {
     }
    
     public void execute(){
-      m_outtake.setIntakePower(OuttakeConstants.OuttakeSpeed);
+      m_outtake.setIntakePower(OuttakeConstants.OuttakeCoralSpeed);
       
     }
 

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.commands.AlignToReefTagRelative;
+import frc.commands.OuttakeCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -176,10 +177,16 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
     .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.3), m_outtake));
     //Intaking Coral/Outtaking Algae
+    //new JoystickButton(m_operatorController, Button.kRightBumper.value)
+    //.whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3), m_outtake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3), m_outtake));
+    .whileTrue(new OuttakeCommand(m_outtake));
     // new JoystickButton(m_driverController, Button.kA.value)
     // .whileTrue(new AlignToReefTagRelative(false, m_robotDrive));
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    .whileTrue(new RunCommand(()-> m_stinger.wristPivotPIDControl(0.2), m_stinger));
+
+    
 
     //Outtaking Coral/Intaking Algae
 
@@ -214,7 +221,7 @@ public class RobotContainer {
   public Command setState(double elevatorPos, double intakePos, double colorLED){
     return Commands.parallel(           
     new RunCommand(() -> m_elevator.elevatorPIDControl(elevatorPos), m_elevator),
-    new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger),
+    new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger), //add the wrist set state later, move it to commands too 
     new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));
   }
 

@@ -100,6 +100,12 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class OuttakeConstants {
+    public static final double OuttakeCoralSpeed = -0.3;
+    public static final int coralIntakeMotorId = 12;
+    public static final int algaeIntakeMotorId = 1000;//MUST CHANGE
+  }
   public static final class ElevatorConstants {   
     public static final int kElevatorMotorCanId = 10;
     public static final int kElevatorFollowerCanId = 9;
@@ -122,6 +128,12 @@ public final class Constants {
     public static final double pivotKP = 1.4; 
     public static final double pivotKI = 0;
     public static final double pivotKD = 0.05;
+    public static final int pivotCurrentLimit = 30;
+    public static final int wristPivotCurrentLimit = 30;
+    public static final double wristPivotKP = 1.4; //MUST TUNEEEEE 
+    public static final double wristPivotKI = 0;
+    public static final double wristPivotKD = 0.05;
+    
     public static final double intakeL4Position = 0.52;
     public static final double intakeL3Position = 0.5;
     public static final double intakeL2Position = 0.5;

@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+
 //import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 public class StingerSubsystem extends SubsystemBase {
@@ -19,12 +20,12 @@ public class StingerSubsystem extends SubsystemBase {
     private AbsoluteEncoder m_absoluteEncoder;
     private PIDController m_pivotPID;
     public double pivotOutput = 0;
+   
     private SparkMax m_wristPivotMotor; 
     private SparkMaxConfig wristPivotConfig; 
     private AbsoluteEncoder m_wristAbsoluteEncoder;
     private PIDController m_wristPivotPID;
     public double wristPivotOutput = 0;
-
 
 
     // Constructors
@@ -33,6 +34,7 @@ public class StingerSubsystem extends SubsystemBase {
         pivotConfig = new SparkMaxConfig();
         pivotConfig.idleMode(IdleMode.kBrake);
         pivotConfig.inverted(true);
+        pivotConfig.smartCurrentLimit(Constants.PivotConstants.pivotCurrentLimit); 
         m_pivotMotor.configure(pivotConfig, null, null);
         
         m_absoluteEncoder =  m_pivotMotor.getAbsoluteEncoder();
@@ -42,10 +44,12 @@ public class StingerSubsystem extends SubsystemBase {
         wristPivotConfig = new SparkMaxConfig();
         wristPivotConfig.idleMode(IdleMode.kBrake);
         wristPivotConfig.inverted(true);
+        wristPivotConfig.smartCurrentLimit(Constants.PivotConstants.wristPivotCurrentLimit);
         m_wristPivotMotor.configure(wristPivotConfig, null, null);
         
         m_wristAbsoluteEncoder =  m_wristPivotMotor.getAbsoluteEncoder();
         m_wristPivotPID = new PIDController(Constants.PivotConstants.wristPivotKP,Constants.PivotConstants.wristPivotKI, Constants.PivotConstants.wristPivotKD);
+
     }
 
 
@@ -70,3 +74,4 @@ public class StingerSubsystem extends SubsystemBase {
        }
 
 }
+
