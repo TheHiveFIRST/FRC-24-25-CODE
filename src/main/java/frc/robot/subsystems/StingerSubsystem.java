@@ -73,5 +73,8 @@ public class StingerSubsystem extends SubsystemBase {
         return m_absoluteEncoder.getPosition();
        }
 
+     public double getCurrentWristAngle(){
+        return m_wristAbsoluteEncoder.getPosition();
+     }
 }
 

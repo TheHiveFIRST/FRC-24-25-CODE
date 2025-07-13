@@ -18,7 +18,6 @@ public class OuttakeSubsystem extends SubsystemBase {
 
 
 
-
     // Constructors
     public OuttakeSubsystem() {
         m_coralIntakeMotor = new SparkMax(Constants.OuttakeConstants.coralIntakeMotorId, MotorType.kBrushless);
@@ -31,8 +30,9 @@ public class OuttakeSubsystem extends SubsystemBase {
     }
 
     // Methods
-    public void setIntakePower(double intakePower){
-        m_coralIntakeMotor.set(intakePower);
+    public void setIntakePower(double coralIntakePower, double algaeIntakePower) {
+        m_coralIntakeMotor.set(coralIntakePower);
+        m_algaeIntakeMotor.set(algaeIntakePower);
     }
 
 }

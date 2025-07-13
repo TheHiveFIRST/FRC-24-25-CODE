@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,11 +18,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.commands.AlignToReefTagRelative;
-import frc.commands.OuttakeCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AlignToReefTagRelative;
+//import frc.robot.commands.OuttakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -57,7 +58,7 @@ import com.pathplanner.lib.events.EventTrigger;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
+  // initialize robot's subsystems
   private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final static LEDSubsystem m_LED = new LEDSubsystem();
   private final static ElevatorSubsystem m_elevator = new ElevatorSubsystem();
@@ -67,7 +68,6 @@ public class RobotContainer {
 
  // private final DigitalInput limitSwitch = new DigitalInput(2);
 
-
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -75,53 +75,47 @@ public class RobotContainer {
   double SLOW_MODE_MULTIPLIER = 0.5;
   Trigger limitSwitchActivation = new Trigger(limitSwitch::get);
 
-
+  //intialize the path planner auto command
   private PathPlannerAuto straightPath = new PathPlannerAuto("StraightFromMiddleAuto");
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */  
   public RobotContainer() {  
+    //Autonomous Path 
     NamedCommands.registerCommand("shoot", new RunCommand(
-      () -> m_outtake.setIntakePower(-0.3)));
+      () -> m_outtake.setIntakePower(-0.3,-0.3)));
     NamedCommands.registerCommand("stopmotor", new RunCommand(
-      () -> m_outtake.setIntakePower(0)));
+      () -> m_outtake.setIntakePower(0,0)));
     NamedCommands.registerCommand("PivotL4", new RunCommand(
       () -> m_stinger.pivotPIDControl(0.5)));
     NamedCommands.registerCommand("ElevatorUp", new RunCommand(
       () -> m_elevator.elevatorPIDControl(32.3)));
 
 
-
-      
     new EventTrigger("ElevatorUp").onTrue(new RunCommand(
-        () -> m_elevator.elevatorPIDControl(32.3
-        )));
+      () -> m_elevator.elevatorPIDControl(32.3)));
     
     new EventTrigger("PivotL4").onTrue(new RunCommand(
-        () -> m_stinger.pivotPIDControl(0.5)));
-    
-    // ishanaPath.timeRange(0, 1).whileTrue(new RunCommand(
-    //   () -> m_autonStinger.setIntakePower(-0.1)));
+      () -> m_stinger.pivotPIDControl(0.5)));
 
     new EventTrigger("shoot").whileTrue(new RunCommand(
-      () -> m_outtake.setIntakePower(-0.3), m_outtake));
+      () -> m_outtake.setIntakePower(-0.3,-0.3), m_outtake));
 
     new EventTrigger("stopmotor").whileTrue(new RunCommand(
-      () -> m_outtake.setIntakePower(0), m_outtake));  // Configure the button bindings
+      () -> m_outtake.setIntakePower(0,0), m_outtake));  
 
     
     configureButtonBindings();
     //m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
-   // m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
-    m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0), m_outtake));
-    m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
+    // m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
 
-    
     // Configure default commands
+    m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0,0), m_outtake));
+    m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
     m_robotDrive.setDefaultCommand(
       new RunCommand(
-          () -> {
+      () -> {
               boolean slowMode = m_driverController.getLeftBumperButton(); // Use Left Bumper for slow mode
               double currentDriveSpeed = slowMode ? driveSpeed * SLOW_MODE_MULTIPLIER : driveSpeed;
   
@@ -129,16 +123,15 @@ public class RobotContainer {
                   -MathUtil.applyDeadband((m_driverController.getLeftY() * currentDriveSpeed), OIConstants.kDriveDeadband),
                   -MathUtil.applyDeadband((m_driverController.getLeftX() * currentDriveSpeed), OIConstants.kDriveDeadband),
                   -MathUtil.applyDeadband((m_driverController.getRightX() * currentDriveSpeed), OIConstants.kDriveDeadband),
-                  true);
-          },
-          m_robotDrive));
+                   true);
+             },m_robotDrive));
   }
 
-  public static void  runDuringTeleop(){
+  public static void runDuringTeleop(){
     m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
    m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
-   
-  }
+  
+  } 
 
    /* created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
@@ -148,57 +141,71 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    //configure the dpad buttons 
     POVButton dpadUp = new POVButton(m_operatorController, 0);
     POVButton dpadRight = new POVButton(m_operatorController, 90);
     POVButton dpadDown = new POVButton(m_operatorController, 180);
     POVButton dpadLeft = new POVButton(m_operatorController, 270);
-    new JoystickButton(m_driverController, Button.kX.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-            .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    //sets the swerve drive wheels to x locked position
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.260), m_stinger));
+
+    //resets the gyro 
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    //L4
     new JoystickButton(m_operatorController, Button.kX.value)
     .whileTrue(setState(Constants.ElevatorConstants.elevatorL4Position, Constants.PivotConstants.intakeL4Position, 0.93)); 
-    //L4
+    //L3
     new JoystickButton(m_operatorController, Button.kY.value)
     .whileTrue(setState(Constants.ElevatorConstants.elevatorL3Position, Constants.PivotConstants.intakeL3Position, 0.77)); 
-    //L3
+    //L2
     new JoystickButton(m_operatorController, Button.kB.value)
     .whileTrue(setState(Constants.ElevatorConstants.elevatorL2Position, Constants.PivotConstants.intakeL2Position, 0.69)); 
-    //L2
+    //Intake
     new JoystickButton(m_operatorController, Button.kA.value)
     .whileTrue(setState(Constants.ElevatorConstants.elevatorIntakePosition, Constants.PivotConstants.intakePosition, 0.41)); 
-    //Intake
   
-  
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.3), m_outtake));
     //Intaking Coral/Outtaking Algae
-    //new JoystickButton(m_operatorController, Button.kRightBumper.value)
-    //.whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3), m_outtake));
-    new JoystickButton(m_operatorController, Button.kRightBumper.value)
-    .whileTrue(new OuttakeCommand(m_outtake));
-    // new JoystickButton(m_driverController, Button.kA.value)
-    // .whileTrue(new AlignToReefTagRelative(false, m_robotDrive));
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-    .whileTrue(new RunCommand(()-> m_stinger.wristPivotPIDControl(0.2), m_stinger));
-
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.3,0.3), m_outtake));
     
-
-    //Outtaking Coral/Intaking Algae
-
-   dpadUp.whileTrue(bargeShot(-0.09));
-   //barge shot
-   
-   dpadLeft.whileTrue(setState(13, 0.45, 0.81)); //Algae Low Reef Intake
-   dpadDown.whileTrue(setState(0.1, 0.5, 0.61)); // Algae Low Intake
-   dpadRight.whileTrue(setState(25, 0.45, 0.87)); //Algae High Reef outtake
+    //new JoystickButton(m_operatorController, Button.kRightBumper.value)
+    //.whileTrue(new OuttakeCommand(m_outtake));
+    
+    //old outtake coral/intake algae 
+    new JoystickButton(m_operatorController, Button.kRightBumper.value)
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3, -0.3), m_outtake));
   
-  new JoystickButton(m_driverController, Button.kStart.value)
+    
+    /*
+    auto align to left side 
+    new JoystickButton(m_driverController, Button.kA.value)
+    .whileTrue(new AlignToReefTagRelative(false, m_robotDrive));
+
+    auto align to right side 
+    new JoystickButton(m_driverController, Button.kB.value)
+    .whileTrue(new AlignToReefTagRelative(true, m_robotDrive));
+
+    */
+
+   //barge shot 
+    dpadUp.whileTrue(bargeShot(-0.09));
+  
+    //old algae intakes 
+    dpadLeft.whileTrue(setState(13, 0.45, 0.81)); //Algae Low Reef Intake
+    dpadDown.whileTrue(setState(0.1, 0.5, 0.61)); // Algae Low Intake
+    dpadRight.whileTrue(setState(25, 0.45, 0.87)); //Algae High Reef outtake
+  
+   //resets elevator encoder 
+   new JoystickButton(m_driverController, Button.kStart.value)
    .whileTrue(new RunCommand(()->m_elevator.resetEncoder(), m_elevator));
+
+   //when limit switch activated, reset the elevator encoder or print there is a stuck coral 
    limitSwitchActivation.whileTrue(
     new RunCommand(() -> {
       if (m_elevator.encoderGetValue() < 5) {
@@ -207,7 +214,7 @@ public class RobotContainer {
       else {
           m_elevator.stuckCoral();
       }
-  }, m_elevator));
+    }, m_elevator));
   }
 
   /**
@@ -218,13 +225,36 @@ public class RobotContainer {
   public Command getAutonomousCommand() {    
     return straightPath;
   }
+
   public Command setState(double elevatorPos, double intakePos, double colorLED){
     return Commands.parallel(           
     new RunCommand(() -> m_elevator.elevatorPIDControl(elevatorPos), m_elevator),
-    new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger), //add the wrist set state later, move it to commands too 
+    new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger),
+    //new RunCommand(() -> m_stinger.wristPivotPIDControl(wristIntakePos), m_stinger),// move this entire setstate into commands 
     new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));
   }
 
+  // //SEQUENTIALLY RUNS THE COMMANDS 
+  // public Command setSequentialState(double elevatorPos, double intakePos, double colorLED, double wristIntakePos){
+  //   return Commands.sequence(           
+  //   new RunCommand(() -> m_elevator.elevatorPIDControl(elevatorPos), m_elevator),
+  //   new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger),
+  //   new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));   
+  //   new RunCommand(() -> m_stinger.wristPivotPIDControl(wristIntakePos), m_stinger),// move this entire setstate into commands 
+  // }
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   public Command bargeShot(double colorLED) {
     return Commands.parallel(
         // Move the elevator to 32.3
@@ -245,9 +275,9 @@ public class RobotContainer {
         }, m_stinger),
         new RunCommand(()->{
           if (m_stinger.encoderGetValue() < .38 && m_elevator.encoderGetValue() > 30 ){
-            m_outtake.setIntakePower(1);
+            m_outtake.setIntakePower(1,1);
           } else {
-            m_outtake.setIntakePower(-0.3);
+            m_outtake.setIntakePower(-0.3,-0.3);
           }
         },  m_outtake)
 
