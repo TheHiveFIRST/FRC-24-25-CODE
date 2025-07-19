@@ -12,20 +12,14 @@ import frc.robot.Constants;
 public class OuttakeSubsystem extends SubsystemBase {
     // Variables
     private SparkMax m_coralIntakeMotor; 
-    private SparkMaxConfig coralIntakeMotorConfig; 
     private SparkMax m_algaeIntakeMotor; 
-    private SparkMaxConfig algaeIntakeMotorConfig; 
 
 
 
     // Constructors
     public OuttakeSubsystem() {
         m_coralIntakeMotor = new SparkMax(Constants.OuttakeConstants.coralIntakeMotorId, MotorType.kBrushless);
-        coralIntakeMotorConfig.idleMode(IdleMode.kBrake);
-        m_coralIntakeMotor.configure(coralIntakeMotorConfig, null, null);
         m_algaeIntakeMotor = new SparkMax(Constants.OuttakeConstants.algaeIntakeMotorId, MotorType.kBrushless);
-        algaeIntakeMotorConfig.idleMode(IdleMode.kBrake); 
-        m_algaeIntakeMotor.configure(algaeIntakeMotorConfig, null, null);
 
     }
 

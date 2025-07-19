@@ -112,7 +112,13 @@ public class RobotContainer {
 
     // Configure default commands
     m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0,0), m_outtake));
+    //m_stinger.setDefaultCommand(new RunCommand(()-> {
+     // m_stinger.wristPivotPIDControl(0.2);
+    //}, m_stinger));
+    m_stinger.setDefaultCommand(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.27), m_stinger));
+
     m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
+
     m_robotDrive.setDefaultCommand(
       new RunCommand(
       () -> {
@@ -127,11 +133,11 @@ public class RobotContainer {
              },m_robotDrive));
   }
 
-  public static void runDuringTeleop(){
-    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
-   m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
+  //public static void runDuringTeleop(){
+  //  m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
+    //m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
   
-  } 
+   //} 
 
    /* created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
@@ -151,8 +157,21 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whileTrue(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.260), m_stinger));
+    //TEST WRIST PIVOT
+        new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new RunCommand(() -> { 
+        
+        m_stinger.wristPivotPIDControl(0.206);
+        //m_stinger.setPivotPower(0.06);
+        }, m_stinger));
+
+    // //TEST  PIVOT
+    // new JoystickButton(m_driverController, Button.kA.value)
+    // .whileTrue(new RunCommand(() ->{ 
+    //   m_stinger.pivotPIDControl(0.62);
+    // }, m_stinger));
+        
+  
 
     //resets the gyro 
     new JoystickButton(m_driverController, Button.kRightBumper.value)

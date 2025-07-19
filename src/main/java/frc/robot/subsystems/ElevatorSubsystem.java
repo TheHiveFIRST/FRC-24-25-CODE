@@ -39,7 +39,7 @@ SlewRateLimiter lessFast = new SlewRateLimiter(1);
         leftConfig.inverted(false);
         rightConfig.inverted(true);
 
-        m_elevatorMotor.configure(leftConfig, null, null);
+        m_elevatorMotor.configure(leftConfig, null, null); 
         m_elevatorFollower.configure(rightConfig, null, null);
     }
 

@@ -40,10 +40,10 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = (3*Math.PI)/2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = (2*Math.PI);
-    public static final double kBackRightChassisAngularOffset = ((3*Math.PI)/2);
+      public static final double kFrontLeftChassisAngularOffset = (3*Math.PI)/2;
+      public static final double kFrontRightChassisAngularOffset = 0;
+      public static final double kBackLeftChassisAngularOffset = (2*Math.PI);
+      public static final double kBackRightChassisAngularOffset = ((3*Math.PI)/2);
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 2;
@@ -103,8 +103,8 @@ public final class Constants {
 
   public static final class OuttakeConstants {
     public static final double OuttakeCoralSpeed = -0.3;
-    public static final int coralIntakeMotorId = 12;
-    public static final int algaeIntakeMotorId = 1000;//MUST CHANGE
+    public static final int coralIntakeMotorId = 14;
+    public static final int algaeIntakeMotorId = 11;//MUST CHANGE
   }
   public static final class ElevatorConstants {   
     public static final int kElevatorMotorCanId = 10;
@@ -123,18 +123,26 @@ public final class Constants {
 
   }
   public static final class PivotConstants {
-    public static final int kPivotMotorId = 11;
-    public static final int kPintakeMotorId = 12;
+    public static final int kPivotMotorId = 12;
+    //public static final int kPintakeMotorId = 11;
     public static final int kWristPivotMotorId = 13;
-    public static final int kcoralintakerMotorId = 14;
+    //public static final int kcoralintakerMotorId = 14;
     public static final double pivotKP = 1.4; 
     public static final double pivotKI = 0;
-    public static final double pivotKD = 0.05;
+    public static final double pivotKD = 0.;
     public static final int pivotCurrentLimit = 30;
     public static final int wristPivotCurrentLimit = 30;
-    public static final double wristPivotKP = 1.4; //MUST TUNEEEEE 
+    public static final double wristPivotKP = 1.6; //MUST TUNEEEEE 
     public static final double wristPivotKI = 0;
-    public static final double wristPivotKD = 0.05;
+    public static final double wristPivotKD = 0.0;
+    public static final double wristIntakePosition = 0.6;
+    public static final double wristSetPosition = 0.83;
+
+
+
+
+    //0.595 intake wrist 0.1 starting 
+
     
     public static final double intakeL4Position = 0.52;
     public static final double intakeL3Position = 0.5;

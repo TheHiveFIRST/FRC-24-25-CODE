@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -23,6 +24,7 @@ public class StingerSubsystem extends SubsystemBase {
    
     private SparkMax m_wristPivotMotor; 
     private SparkMaxConfig wristPivotConfig; 
+    //private SoftLimitConfig softLimitConfig; 
     private AbsoluteEncoder m_wristAbsoluteEncoder;
     private PIDController m_wristPivotPID;
     public double wristPivotOutput = 0;
@@ -40,41 +42,52 @@ public class StingerSubsystem extends SubsystemBase {
         m_absoluteEncoder =  m_pivotMotor.getAbsoluteEncoder();
         m_pivotPID = new PIDController(Constants.PivotConstants.pivotKP,Constants.PivotConstants.pivotKI, Constants.PivotConstants.pivotKD);
     
-        m_wristPivotMotor = new SparkMax(Constants.PivotConstants.kPivotMotorId/*CHANGE ID */, MotorType.kBrushless);
+        m_wristPivotMotor = new SparkMax(Constants.PivotConstants.kWristPivotMotorId, MotorType.kBrushless);
         wristPivotConfig = new SparkMaxConfig();
         wristPivotConfig.idleMode(IdleMode.kBrake);
         wristPivotConfig.inverted(true);
         wristPivotConfig.smartCurrentLimit(Constants.PivotConstants.wristPivotCurrentLimit);
+        //softLimitConfig = new SoftLimitConfig();
+        //softLimitConfig.forwardSoftLimit(0.2);
+        //softLimitConfig.forwardSoftLimitEnabled(true);
+        //softLimitConfig.reverseSoftLimit(0.2);
+        //softLimitConfig.reverseSoftLimitEnabled(true);
+        //wristPivotConfig.apply(softLimitConfig);
         m_wristPivotMotor.configure(wristPivotConfig, null, null);
         
         m_wristAbsoluteEncoder =  m_wristPivotMotor.getAbsoluteEncoder();
+        
         m_wristPivotPID = new PIDController(Constants.PivotConstants.wristPivotKP,Constants.PivotConstants.wristPivotKI, Constants.PivotConstants.wristPivotKD);
+        
 
     }
 
 
     public void setPivotPower(double pivotPower){
-        m_pivotMotor.set(pivotPower);
+        m_wristPivotMotor.set(pivotPower);
+
+        //System.out.println(pivotPower);
     }
 
     public void pivotPIDControl(double targetAngle) {
         pivotOutput = m_pivotPID.calculate(m_absoluteEncoder.getPosition(), targetAngle);
         m_pivotMotor.set(pivotOutput);  
-        //System.out.println("pivot pid ran, target angle was" + targetAngle);
+        System.out.println("pivot pid ran, pivot output was" + pivotOutput);
     }
-    public void wristPivotPIDControl(double targetWristAngle) {
-        //wristPivotOutput = m_wristPivotPID.calculate(m_wristAbsoluteEncoder.getPosition(), targetWristAngle);
-        //m_wristPivotMotor.set(wristPivotOutput);  
 
-        System.out.println("pivot pid ran, target angle was" + targetWristAngle);
+    public void wristPivotPIDControl(double targetWristAngle) {
+        wristPivotOutput = m_wristPivotPID.calculate(m_wristAbsoluteEncoder.getPosition(), targetWristAngle);
+        m_wristPivotMotor.set(wristPivotOutput);
+
+        System.out.println("pivot pid ran, wrist output was" + wristPivotOutput);
     }
 
      public double encoderGetValue(){
         return m_absoluteEncoder.getPosition();
-       }
+    }
 
-     public double getCurrentWristAngle(){
+    public double getCurrentWristAngle(){
         return m_wristAbsoluteEncoder.getPosition();
-     }
+    }
 }
 
