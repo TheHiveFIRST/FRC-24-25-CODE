@@ -58,7 +58,6 @@ public class StingerSubsystem extends SubsystemBase {
         m_wristAbsoluteEncoder =  m_wristPivotMotor.getAbsoluteEncoder();
         
         m_wristPivotPID = new PIDController(Constants.PivotConstants.wristPivotKP,Constants.PivotConstants.wristPivotKI, Constants.PivotConstants.wristPivotKD);
-        
 
     }
 
@@ -79,7 +78,7 @@ public class StingerSubsystem extends SubsystemBase {
         wristPivotOutput = m_wristPivotPID.calculate(m_wristAbsoluteEncoder.getPosition(), targetWristAngle);
         m_wristPivotMotor.set(wristPivotOutput);
 
-        System.out.println("pivot pid ran, wrist output was" + wristPivotOutput);
+        //System.out.println("pivot pid ran, wrist output was" + wristPivotOutput);
     }
 
      public double encoderGetValue(){

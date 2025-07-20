@@ -79,7 +79,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
-    public static final double kDriveDeadband = 0.09;
+    public static final double kDriveDeadband = 0.2;
   }
 
   public static final class AutoConstants {
@@ -104,14 +104,14 @@ public final class Constants {
   public static final class OuttakeConstants {
     public static final double OuttakeCoralSpeed = -0.3;
     public static final int coralIntakeMotorId = 14;
-    public static final int algaeIntakeMotorId = 11;//MUST CHANGE
+    public static final int algaeIntakeMotorId = 11;
   }
   public static final class ElevatorConstants {   
     public static final int kElevatorMotorCanId = 10;
     public static final int kElevatorFollowerCanId = 9;
-    public static final double KP = 0.28;
-    public static final double KI = 0;
-    public static final double KD = 0.01;
+    public static final double KP = 0.492;
+    public static final double KI = 0.0;
+    public static final double KD = 0.00;
     public static final int KEncoderChannelA = 0;
     public static final int KEncoderChannelB = 1;
     public static final double elevatorIntakePosition = 0.5;
@@ -132,7 +132,7 @@ public final class Constants {
     public static final double pivotKD = 0.;
     public static final int pivotCurrentLimit = 30;
     public static final int wristPivotCurrentLimit = 30;
-    public static final double wristPivotKP = 1.6; //MUST TUNEEEEE 
+    public static final double wristPivotKP = 1.8; //MUST TUNEEEEE 
     public static final double wristPivotKI = 0;
     public static final double wristPivotKD = 0.0;
     public static final double wristIntakePosition = 0.6;

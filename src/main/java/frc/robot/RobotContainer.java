@@ -112,12 +112,18 @@ public class RobotContainer {
 
     // Configure default commands
     m_outtake.setDefaultCommand(new RunCommand(()-> m_outtake.setIntakePower(0,0), m_outtake));
-    //m_stinger.setDefaultCommand(new RunCommand(()-> {
-     // m_stinger.wristPivotPIDControl(0.2);
-    //}, m_stinger));
-    m_stinger.setDefaultCommand(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.27), m_stinger));
+  
+
+    m_stinger.setDefaultCommand(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.313), m_stinger)); //DEFAULT POSITION FOR WRIST 
 
     m_LED.setDefaultCommand(new RunCommand(()-> m_LED.setPattern(-0.99), m_LED));
+
+    //Find elevator value 
+    m_elevator.setDefaultCommand(new RunCommand(() -> m_elevator.elevatorPIDControl(m_elevator.currentPosition)
+     , m_elevator));
+    //m_elevator.setDefaultCommand(new RunCommand(() -> {m_elevator.encoderGetValue();
+       //System.out.println(m_elevator.encoderGetValue());}
+      //, m_elevator));
 
     m_robotDrive.setDefaultCommand(
       new RunCommand(
@@ -130,14 +136,14 @@ public class RobotContainer {
                   -MathUtil.applyDeadband((m_driverController.getLeftX() * currentDriveSpeed), OIConstants.kDriveDeadband),
                   -MathUtil.applyDeadband((m_driverController.getRightX() * currentDriveSpeed), OIConstants.kDriveDeadband),
                    true);
-             },m_robotDrive));
+             }, m_robotDrive));
   }
 
-  //public static void runDuringTeleop(){
+  // public static void runDuringTeleop(){
   //  m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.elevatorPIDControl(0), m_elevator));
-    //m_stinger.setDefaultCommand(new RunCommand(()-> m_stinger.pivotPIDControl(0.3), m_stinger));
+  //  m_stinger.setDefaultCommand(new RunCommand(() -> m_stinger.wristPivotPIDControl(0.27), m_stinger));
   
-   //} 
+  // } 
 
    /* created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
@@ -158,18 +164,25 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     
     //TEST WRIST PIVOT
-        new JoystickButton(m_driverController, Button.kB.value)
+    new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new RunCommand(() -> { 
         
         m_stinger.wristPivotPIDControl(0.206);
         //m_stinger.setPivotPower(0.06);
         }, m_stinger));
 
-    // //TEST  PIVOT
-    // new JoystickButton(m_driverController, Button.kA.value)
-    // .whileTrue(new RunCommand(() ->{ 
-    //   m_stinger.pivotPIDControl(0.62);
-    // }, m_stinger));
+    //TEST ELEVATOR 
+    new JoystickButton(m_driverController, Button.kA.value)
+       .whileTrue(new RunCommand(() ->{ 
+       m_elevator.elevatorPIDControl(5);
+       System.out.println( m_elevator.encoderGetValue());
+     }, m_stinger));
+
+     new JoystickButton(m_driverController, Button.kY.value)
+       .onTrue(new RunCommand(() ->{ 
+       m_elevator.elevatorPIDControl(0);
+       System.out.println( m_elevator.encoderGetValue());
+     }, m_stinger));
         
   
 
@@ -190,15 +203,15 @@ public class RobotContainer {
     .whileTrue(setState(Constants.ElevatorConstants.elevatorIntakePosition, Constants.PivotConstants.intakePosition, 0.41)); 
   
     //Intaking Coral/Outtaking Algae
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.3,0.3), m_outtake));
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.4,0.6), m_outtake));
     
     //new JoystickButton(m_operatorController, Button.kRightBumper.value)
     //.whileTrue(new OuttakeCommand(m_outtake));
     
     //old outtake coral/intake algae 
-    new JoystickButton(m_operatorController, Button.kRightBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.3, -0.3), m_outtake));
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.4, -0.6), m_outtake));
   
     
     /*
@@ -222,17 +235,23 @@ public class RobotContainer {
   
    //resets elevator encoder 
    new JoystickButton(m_driverController, Button.kStart.value)
-   .whileTrue(new RunCommand(()->m_elevator.resetEncoder(), m_elevator));
+   .whileTrue(new RunCommand(()-> {
+        if(m_elevator.encoderGetValue() < 5){
+          m_elevator.resetEncoder(); 
+          System.out.println("LIMIT SET RESESTTIONG");
+        }
+      }, m_elevator));
 
    //when limit switch activated, reset the elevator encoder or print there is a stuck coral 
    limitSwitchActivation.whileTrue(
     new RunCommand(() -> {
-      if (m_elevator.encoderGetValue() < 5) {
+      if (m_elevator.encoderGetValue() < 2) {
           m_elevator.resetEncoder();
-      } 
-      else {
-          m_elevator.stuckCoral();
-      }
+          System.out.println("LIMIT RESETING");
+       } 
+       else {
+           m_elevator.stuckCoral();
+       }
     }, m_elevator));
   }
 
