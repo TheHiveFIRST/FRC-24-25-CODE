@@ -160,29 +160,34 @@ public class RobotContainer {
     POVButton dpadLeft = new POVButton(m_operatorController, 270);
 
     //sets the swerve drive wheels to x locked position
-    new JoystickButton(m_driverController, Button.kX.value)
-        .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    // new JoystickButton(m_driverController, Button.kX.value)
+    //     .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     
     //TEST WRIST PIVOT
     new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new RunCommand(() -> { 
-        
         m_stinger.wristPivotPIDControl(0.206);
         //m_stinger.setPivotPower(0.06);
         }, m_stinger));
 
-    //TEST ELEVATOR 
-    new JoystickButton(m_driverController, Button.kA.value)
-       .whileTrue(new RunCommand(() ->{ 
-       m_elevator.elevatorPIDControl(5);
+    //TEST ELEVATOR UP Position 
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //    .whileTrue(new RunCommand(() ->{ 
+    //    m_elevator.elevatorPIDControl(5);
+    //    System.out.println( m_elevator.encoderGetValue());
+    //  }, m_stinger));
+     //TEST ELEVATOR Down Position 
+     new JoystickButton(m_driverController, Button.kY.value)
+       .onTrue(new RunCommand(() ->{ 
+       m_elevator.elevatorPIDControl(1);
        System.out.println( m_elevator.encoderGetValue());
      }, m_stinger));
 
-     new JoystickButton(m_driverController, Button.kY.value)
-       .onTrue(new RunCommand(() ->{ 
-       m_elevator.elevatorPIDControl(0);
-       System.out.println( m_elevator.encoderGetValue());
-     }, m_stinger));
+    new JoystickButton(m_driverController, Button.kA.value)
+       .whileTrue(setWristState(1.5, 0.35));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+       .whileTrue(setWristState(22.1, 0.05));
         
   
 
@@ -204,14 +209,14 @@ public class RobotContainer {
   
     //Intaking Coral/Outtaking Algae
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.4,0.6), m_outtake));
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(0.5,0.8), m_outtake));
     
     //new JoystickButton(m_operatorController, Button.kRightBumper.value)
     //.whileTrue(new OuttakeCommand(m_outtake));
     
     //old outtake coral/intake algae 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.4, -0.6), m_outtake));
+    .whileTrue(new RunCommand(()-> m_outtake.setIntakePower(-0.5, -0.8), m_outtake));
   
     
     /*
@@ -270,6 +275,13 @@ public class RobotContainer {
     new RunCommand(() -> m_stinger.pivotPIDControl(intakePos), m_stinger),
     //new RunCommand(() -> m_stinger.wristPivotPIDControl(wristIntakePos), m_stinger),// move this entire setstate into commands 
     new RunCommand(() -> m_LED.setPattern(colorLED), m_LED));
+  }
+
+  public Command setWristState(double elevatorPos, double wristIntakePos){
+    return Commands.parallel(           
+    new RunCommand(() -> m_elevator.elevatorPIDControl(elevatorPos), m_elevator),
+    new RunCommand(() -> m_stinger.wristPivotPIDControl(wristIntakePos), m_stinger)
+    );// move this entire setstate into commands 
   }
 
   // //SEQUENTIALLY RUNS THE COMMANDS 
